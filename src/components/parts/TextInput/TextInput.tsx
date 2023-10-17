@@ -7,59 +7,61 @@ import InputLabel from "@/components/parts/InputLabel";
 import ValidationLabel from "@/components/parts/ValidationLabel/index";
 
 export type TextInputFormControlProps = Omit<
-  FormControlProps,
-  "error" | "disabled"
+	FormControlProps,
+	"error" | "disabled"
 >;
 
 export type TextInputProps = Omit<TextFieldProps, "error"> & {
-  error?: string;
-  label?: string;
-  hasRequiredLabel?: boolean;
-  formControlProps?: TextInputFormControlProps;
+	error?: string;
+	label?: string;
+	hasRequiredLabel?: boolean;
+	formControlProps?: TextInputFormControlProps;
 };
 
 function TextInput(props: TextInputProps) {
-  const {
-    label,
-    error,
-    disabled,
-    formControlProps,
-    hasRequiredLabel,
-    ...rest
-  } = props;
-  const helperText = error ?? undefined;
+	const {
+		label,
+		error,
+		disabled,
+		formControlProps,
+		hasRequiredLabel,
+		...rest
+	} = props;
+	const helperText = error ?? undefined;
 
-  return (
-    <FormControl error={!!error} disabled={disabled} {...formControlProps}>
-      <Stack direction="row">
-        {label && <InputLabel>{label}</InputLabel>}
+	return (
+		<FormControl error={!!error} disabled={disabled} {...formControlProps}>
+			<Stack direction="row">
+				{label && <InputLabel>{label}</InputLabel>}
 
-        {hasRequiredLabel && (
-          <ValidationLabel
-            sx={{
-              color: "common.white",
-              mb: 0.5,
-              mr: 1,
-              bgcolor: "error.main",
-            }}
-            label="Required"
-          />
-        )}
-      </Stack>
-      <TextField
-        {...rest}
-        value={rest.value ?? ""}
-        variant="outlined"
-        sx={{
-          backgroundColor: "#FCFDFE",
-          "& .MuiOutlinedInput-notchedOutline": { borderColor: "#F0F1F7" },
-          //"& . MuiInputBase-input-MuiOutlinedInput-input": { outline: "none" }, //TODO: disable focused color
-        }}
-        helperText={helperText}
-        error={!!error}
-        disabled={disabled}
-      />
-    </FormControl>
-  );
+				{hasRequiredLabel && (
+					<ValidationLabel
+						sx={{
+							color: "common.white",
+							mb: 0.5,
+							mr: 1,
+							bgcolor: "error.main",
+						}}
+						label="Required"
+					/>
+				)}
+			</Stack>
+			<TextField
+				{...rest}
+				value={rest.value ?? ""}
+				variant="outlined"
+				sx={{
+					backgroundColor: "#FCFDFE",
+					"& .MuiOutlinedInput-notchedOutline": {
+						borderColor: "#F0F1F7",
+					},
+					//"& . MuiInputBase-input-MuiOutlinedInput-input": { outline: "none" }, //TODO: disable focused color
+				}}
+				helperText={helperText}
+				error={!!error}
+				disabled={disabled}
+			/>
+		</FormControl>
+	);
 }
 export default memo(TextInput);

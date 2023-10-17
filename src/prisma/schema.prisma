@@ -104,7 +104,7 @@ model Media {
   file      String
   type      String
   //This will determine the status{'POST QUAL', "NOTICE TO PROCEED, 'COOLECTION OF RECEIPT", "Aceeptance"} origin of files/medias 
-  origin    String
+  // origin    String
   createdAt DateTime  @default(now())
   deletedAt DateTime?
   project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)

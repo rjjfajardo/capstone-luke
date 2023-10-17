@@ -6,7 +6,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FindOneProject } from "../ProjectDetail/hooks";
+import { Project } from "@prisma/client";
 
 export interface FormValues {
   title: string;
@@ -44,7 +44,7 @@ interface UserFindAll {
 export const useHooks = ({ projectId }: { projectId: string }) => {
   const session = useSession();
   //   const { data: users }: { data?: UserFindAll[] } = useSWR("/user");
-  const { data: project }: { data: FindOneProject | undefined } = useSWR(
+  const { data: project }: { data: Project | undefined } = useSWR(
     `/project/${projectId}`
   );
   // const [files, setFiles] = useState<FileType[]>([]);
@@ -56,7 +56,7 @@ export const useHooks = ({ projectId }: { projectId: string }) => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<Project>({
     defaultValues: {
       title: project?.title,
       procuringEntity: project?.procuringEntity,
@@ -85,8 +85,6 @@ export const useHooks = ({ projectId }: { projectId: string }) => {
   //         alert("ALL GOOD");
   //       });
   //   };
-
-  console.log("from edit form", project);
 
   return {
     control,

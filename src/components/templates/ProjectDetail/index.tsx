@@ -20,8 +20,8 @@ import ActivityLogsDrawer from "./ActivityLogs";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const StyledBox = styled(Box)({
-  display: "flex",
-  gap: 10,
+	display: "flex",
+	gap: 10,
 });
 
 // const ProjectInfo = () => {
@@ -61,215 +61,252 @@ const StyledBox = styled(Box)({
 // }
 
 const ProjectDetail = ({ projectId }: { projectId: string }) => {
-  const { data, isEditing, setIsEditing } = useHooks(projectId);
+	const { data, isEditing, setIsEditing } = useHooks(projectId);
 
-  return (
-    <>
-      <Grid container spacing={1.5}>
-        <Grid item xs={12} lg={12}>
-          <Stack height={130} boxShadow={2} p={1} borderRadius={1} padding={2}>
-            <ProjectDetailDrawers
-              priority={data?.priority || ""}
-              projectId={projectId}
-              comments={data?.comment || []}
-              activityLog={data?.activityLog || []}
-            />
-            <StatusTrail status={data?.status || ""} projectId={projectId} />
-          </Stack>
-        </Grid>
-        <Grid item xs={12} lg={12}>
-          <Stack height={80} boxShadow={2} p={1} borderRadius={1} padding={2}>
-            {" "}
-            <Box
-              sx={{
-                fontSize: 13,
-                color: "#BCB7B7",
-                fontWeight: 500,
-              }}
-            >
-              Title
-              <Typography fontSize={18} color="#000000" fontWeight={600}>
-                {data?.title}
-              </Typography>
-            </Box>
-          </Stack>
-        </Grid>
-        <Grid item xs={12} lg={12}>
-          <Stack
-            height="auto"
-            boxShadow={2}
-            p={1}
-            borderRadius={1}
-            mb={1}
-            padding={2}
-            gap={3}
-          >
-            <Box display="flex" justifyContent="flex-end">
-              {isEditing ? (
-                <Stack direction="row" justifyContent="center" gap={2}>
-                  <Button
-                    type="submit"
-                    // color="primary"
-                    variant="outlined"
-                    sx={{ width: 80 }}
-                    onClick={() => setIsEditing(false)}
-                  >
-                    {"Cancel"}
-                  </Button>
-                  <Button
-                    type="submit"
-                    color="primary"
-                    variant="contained"
-                    sx={{ width: 80 }}
-                  >
-                    {"Save"}
-                  </Button>
-                </Stack>
-              ) : (
-                <>
-                  <IconButton
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      backgroundColor: "primary.main",
-                      borderRadius: 1,
-                      color: "#FFFFFF",
-                      "&:hover": {
-                        backgroundColor: "#246BFD",
-                      },
-                    }}
-                    onClick={() => setIsEditing(true)}
-                  >
-                    <ModeEditIcon />
-                  </IconButton>
-                </>
-              )}
-            </Box>
-            {isEditing ? (
-              <>
-                <EditProjectForm projectId={projectId} />
-              </>
-            ) : (
-              <Stack display="flex" flexDirection="row" flexShrink={2} gap={6}>
-                <Box
-                  sx={{
-                    fontSize: 13,
-                    color: "#BCB7B7",
-                    fontWeight: 500,
-                  }}
-                >
-                  Procuring Entity
-                  <Typography fontSize={17} color="#000000">
-                    {data?.procuringEntity}
-                  </Typography>
-                </Box>
+	return (
+		<>
+			<Grid container spacing={1.5}>
+				<Grid item xs={12} lg={12}>
+					<Stack
+						height={80}
+						boxShadow={2}
+						p={1}
+						borderRadius={1}
+						padding={2}
+					>
+						{" "}
+						<Box
+							sx={{
+								fontSize: 13,
+								color: "#BCB7B7",
+								fontWeight: 500,
+							}}
+						>
+							Title
+							<Typography
+								fontSize={18}
+								color="#000000"
+								fontWeight={600}
+							>
+								{data?.title}
+							</Typography>
+						</Box>
+					</Stack>
+				</Grid>
+				<Grid item xs={12} lg={12}>
+					<Stack
+						height={130}
+						boxShadow={2}
+						p={1}
+						borderRadius={1}
+						padding={2}
+					>
+						<ProjectDetailDrawers
+							priority={data?.priority || ""}
+							projectId={projectId}
+							comments={data?.comment || []}
+							activityLog={data?.activityLog || []}
+						/>
+						<StatusTrail
+							status={data?.status || ""}
+							projectId={projectId}
+						/>
+					</Stack>
+				</Grid>
 
-                <Box
-                  sx={{
-                    fontSize: 13,
-                    color: "#BCB7B7",
-                    fontWeight: 500,
-                  }}
-                >
-                  Reference Number
-                  <Typography fontSize={17} color="#000000">
-                    {data?.referenceNumber}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    fontSize: 13,
-                    color: "#BCB7B7",
-                    fontWeight: 500,
-                  }}
-                >
-                  Area of Delivery
-                  <Typography fontSize={17} color="#000000">
-                    {data?.areaOfDelivery}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    fontSize: 13,
-                    color: "#BCB7B7",
-                    fontWeight: 500,
-                  }}
-                >
-                  Approved Budget Contract
-                  <Typography fontSize={17} color="#000000">
-                    {formatToPhp(Number(data?.approvedBudgetContract))}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    fontSize: 13,
-                    color: "#BCB7B7",
-                    fontWeight: 500,
-                  }}
-                >
-                  Procurement Mode
-                  <Typography fontSize={17} color="#000000">
-                    {data?.procurementMode}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    fontSize: 13,
-                    color: "#BCB7B7",
-                    fontWeight: 500,
-                  }}
-                >
-                  Contract Duration
-                  <Typography fontSize={17} color="#000000">
-                    {`${data?.contractDuration} days`}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    fontSize: 13,
-                    color: "#BCB7B7",
-                    fontWeight: 500,
-                  }}
-                >
-                  Priority
-                  <Typography fontSize={17} color="#000000">
-                    {data?.priority}
-                  </Typography>
-                </Box>
-              </Stack>
-            )}
-          </Stack>
-        </Grid>
-        <Grid item xs={12} lg={12}>
-          <Stack height="auto" boxShadow={2} p={1} borderRadius={1} padding={2}>
-            {/* <Typography fontSize={18} fontWeight={600} mb={1}>
+				<Grid item xs={12} lg={12}>
+					<Stack
+						height="auto"
+						boxShadow={2}
+						p={1}
+						borderRadius={1}
+						mb={1}
+						padding={2}
+						gap={3}
+					>
+						<Box display="flex" justifyContent="flex-end">
+							{isEditing ? (
+								<Stack
+									direction="row"
+									justifyContent="center"
+									gap={2}
+								>
+									<Button
+										type="submit"
+										// color="primary"
+										variant="outlined"
+										sx={{ width: 80 }}
+										onClick={() => setIsEditing(false)}
+									>
+										{"Cancel"}
+									</Button>
+									<Button
+										type="submit"
+										color="primary"
+										variant="contained"
+										sx={{ width: 80 }}
+									>
+										{"Save"}
+									</Button>
+								</Stack>
+							) : (
+								<>
+									<IconButton
+										sx={{
+											width: 40,
+											height: 40,
+											backgroundColor: "primary.main",
+											borderRadius: 1,
+											color: "#FFFFFF",
+											"&:hover": {
+												backgroundColor: "#246BFD",
+											},
+										}}
+										onClick={() => setIsEditing(true)}
+									>
+										<ModeEditIcon />
+									</IconButton>
+								</>
+							)}
+						</Box>
+						{isEditing ? (
+							<>
+								<EditProjectForm projectId={projectId} />
+							</>
+						) : (
+							<Stack
+								display="flex"
+								flexDirection="row"
+								flexShrink={2}
+								gap={6}
+							>
+								<Box
+									sx={{
+										fontSize: 13,
+										color: "#BCB7B7",
+										fontWeight: 500,
+									}}
+								>
+									Procuring Entity
+									<Typography fontSize={17} color="#000000">
+										{data?.procuringEntity}
+									</Typography>
+								</Box>
+
+								<Box
+									sx={{
+										fontSize: 13,
+										color: "#BCB7B7",
+										fontWeight: 500,
+									}}
+								>
+									Reference Number
+									<Typography fontSize={17} color="#000000">
+										{data?.referenceNumber}
+									</Typography>
+								</Box>
+								<Box
+									sx={{
+										fontSize: 13,
+										color: "#BCB7B7",
+										fontWeight: 500,
+									}}
+								>
+									Area of Delivery
+									<Typography fontSize={17} color="#000000">
+										{data?.areaOfDelivery}
+									</Typography>
+								</Box>
+								<Box
+									sx={{
+										fontSize: 13,
+										color: "#BCB7B7",
+										fontWeight: 500,
+									}}
+								>
+									Approved Budget Contract
+									<Typography fontSize={17} color="#000000">
+										{formatToPhp(
+											Number(data?.approvedBudgetContract)
+										)}
+									</Typography>
+								</Box>
+								<Box
+									sx={{
+										fontSize: 13,
+										color: "#BCB7B7",
+										fontWeight: 500,
+									}}
+								>
+									Procurement Mode
+									<Typography fontSize={17} color="#000000">
+										{data?.procurementMode}
+									</Typography>
+								</Box>
+								<Box
+									sx={{
+										fontSize: 13,
+										color: "#BCB7B7",
+										fontWeight: 500,
+									}}
+								>
+									Contract Duration
+									<Typography fontSize={17} color="#000000">
+										{`${data?.contractDuration} days`}
+									</Typography>
+								</Box>
+								<Box
+									sx={{
+										fontSize: 13,
+										color: "#BCB7B7",
+										fontWeight: 500,
+									}}
+								>
+									Priority
+									<Typography fontSize={17} color="#000000">
+										{data?.priority}
+									</Typography>
+								</Box>
+							</Stack>
+						)}
+					</Stack>
+				</Grid>
+				<Grid item xs={12} lg={12}>
+					<Stack
+						height="auto"
+						boxShadow={2}
+						p={1}
+						borderRadius={1}
+						padding={2}
+					>
+						{/* <Typography fontSize={18} fontWeight={600} mb={1}>
               {" "}
               Activity Logs
             </Typography> */}
-            {/* {data?.media.map((d) => (
+						{/* {data?.media.map((d) => (
               <Box key={d.id} border={1} width="100%" p={2} mb={1}>
                 {d.file}
               </Box>
             ))} */}
-            <ActivityLogsDrawer
-              activityLog={data?.activityLog || []}
-              mobileHandleCloseDrawer={() => console.log("s")}
-            />
-          </Stack>
-          <Button
-            type="submit"
-            // color="primary"
-            color="error"
-            variant="outlined"
-            sx={{ mt: 2 }}
-            onClick={() => setIsEditing(false)}
-            startIcon={<DeleteIcon />}
-          >
-            {"Delete Project"}
-          </Button>
-        </Grid>
+						<ActivityLogsDrawer
+							activityLog={data?.activityLog || []}
+							mobileHandleCloseDrawer={() => console.log("s")}
+						/>
+					</Stack>
+					<Button
+						type="submit"
+						// color="primary"
+						color="error"
+						variant="outlined"
+						sx={{ mt: 2 }}
+						onClick={() => setIsEditing(false)}
+						startIcon={<DeleteIcon />}
+					>
+						{"Delete Project"}
+					</Button>
+				</Grid>
 
-        {/* <Grid item xs={12} lg={12}>
+				{/* <Grid item xs={12} lg={12}>
           <Stack height={480} boxShadow={2} p={1} borderRadius={1} padding={2}>
             <CommentsDrawer
               projectId={projectId}
@@ -278,9 +315,9 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
             />
           </Stack>
         </Grid> */}
-      </Grid>
-    </>
-  );
+			</Grid>
+		</>
+	);
 };
 
 export default ProjectDetail;
