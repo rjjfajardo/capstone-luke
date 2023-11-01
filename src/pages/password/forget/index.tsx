@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import TextInput from "@/components/parts/TextInput";
 import NonLoginForm from "@/components/templates/Layout/NonLoginFormLayout";
 
-import { useHooks } from "./hooks";
+import { useHooks } from "../../../hooks/password/forget/hooks";
 
 function PasswordForgetPage() {
   const { control } = useHooks();

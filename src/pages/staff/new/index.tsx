@@ -3,7 +3,7 @@ import TextInput from "@/components/parts/TextInput";
 import CustomAvatar from "@/components/templates/CustomAvatar";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { Button, Grid, IconButton, Stack } from "@mui/material";
-import { useHooks } from "./hooks";
+import { useHooks } from "../../../hooks/staff/new/hooks";
 
 const NewStaff = () => {
   const { control } = useHooks();

@@ -1,7 +1,7 @@
 import ProjectDetail from "@/components/templates/ProjectDetail";
 import Box from "@mui/material/Box";
 
-import { useHooks } from "./hooks";
+import { useHooks } from "../../../hooks/projects/projectDetails/hooks";
 
 const ProjectHeader = () => {
   return (

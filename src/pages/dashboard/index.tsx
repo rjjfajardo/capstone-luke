@@ -1,6 +1,6 @@
 import AdminDashboard from "@/components/templates/AdminDashboard";
 import StaffDashboard from "@/components/templates/StaffDashboard";
-import { useHooks } from "./hooks";
+import { useHooks } from "../../hooks/dashboard/hooks";
 import Loading from "@/components/parts/Loading";
 import { CtxOrReq } from "next-auth/client/_utils";
 import { getSession } from "next-auth/react";
