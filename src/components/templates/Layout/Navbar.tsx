@@ -60,6 +60,7 @@ import { useHooks } from "./hooks";
 interface NavbarProps {
   drawerWidth: string;
   handleDrawerToggle: () => void;
+  // user:
 }
 
 const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
@@ -99,10 +100,6 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
   const handleProfileMenuOpen = (event: SyntheticEvent<EventTarget>) => {
     setAnchorEl(event.currentTarget);
   };
-
-  //   const { data } = useSWR("/notifications/notif_count", {
-  //     refreshInterval: 0,
-  //   });
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (

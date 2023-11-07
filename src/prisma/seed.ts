@@ -10,7 +10,7 @@ async function main() {
     update: {},
     create: {
       fullName: "Blessy Grace Paglinawan",
-      email: "bgrace25@gmail.com",
+      email: "andrew@gmail.com",
       password: bcrypt.hashSync("!JesusReigns2022", bcrypt.genSaltSync(10)),
       role: "admin",
       image: "",

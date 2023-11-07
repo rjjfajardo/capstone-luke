@@ -8,8 +8,14 @@ import CloseIcon from "@mui/icons-material/Close";
 //TODO: Put tabs eg ('Files' and 'Medias' and then group by from what status )
 interface Props {
   mobileHandleCloseDrawer: (close: boolean) => void;
+  projectId: string;
+  media: {
+    fileName: string;
+    fileUrl: string;
+    origin: string;
+  }[];
 }
-const AttachmentsDrawer = ({ mobileHandleCloseDrawer }: Props) => {
+const AttachmentsDrawer = ({ mobileHandleCloseDrawer, media }: Props) => {
   return (
     <Stack fontSize={20} fontWeight={600}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -22,7 +28,7 @@ const AttachmentsDrawer = ({ mobileHandleCloseDrawer }: Props) => {
           <CloseIcon />
         </IconButton>
       </Box>
-
+      {JSON.stringify(media)}
       <Divider sx={{ marginTop: 1 }} />
     </Stack>
   );

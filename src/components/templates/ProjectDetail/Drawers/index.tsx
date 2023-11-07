@@ -19,6 +19,7 @@ const ProjectDetailDrawers = ({
   projectId,
   comments,
   activityLog,
+  media,
 }: {
   priority: string;
   projectId: string;
@@ -39,6 +40,11 @@ const ProjectDetailDrawers = ({
       }[];
     };
     createdAt: string;
+  }[];
+  media: {
+    fileName: string;
+    fileUrl: string;
+    origin: string;
   }[];
 }) => {
   const [selectedButton, setSelectedButton] = useState<DrawerButton | null>(
@@ -69,7 +75,11 @@ const ProjectDetailDrawers = ({
       key: "Uploads",
       icon: <CloudUploadIcon fontSize="inherit" />,
       drawerContent: (
-        <AttachmentsDrawer mobileHandleCloseDrawer={handleCloseDrawer} />
+        <AttachmentsDrawer
+          mobileHandleCloseDrawer={handleCloseDrawer}
+          projectId={projectId}
+          media={media}
+        />
       ),
     },
     {

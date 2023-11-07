@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import LoginLayout from "./LoginLayout";
 import NonLoginLayout from "./NotLoginLayout";
 import { useHooks } from "./hooks";
+import Loading from "@/components/parts/Loading";
 
 const drawerWidth = 240;
 

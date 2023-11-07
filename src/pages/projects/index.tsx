@@ -1,12 +1,16 @@
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import PageTitle from "@/components/parts/PageTitlte";
 import { Stack, Box, Button } from "@mui/material";
 import TextInput from "@/components/parts/TextInput";
 import ProjectListTable from "@/components/templates/ProjectListTable";
 import { useHooks } from "../../hooks/projects/hooks";
+import PageTitle from "@/components/parts/PageTitlte";
+
+import { CtxOrReq } from "next-auth/client/_utils";
+import { getSession } from "next-auth/react";
 
 const ProjectListPage = () => {
   const { control } = useHooks();
+
   return (
     <>
       <PageTitle title="PROJECTS" />
@@ -43,3 +47,18 @@ const ProjectListPage = () => {
 };
 
 export default ProjectListPage;
+
+export async function getServerSideProps(context: CtxOrReq) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}

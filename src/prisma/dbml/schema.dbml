@@ -79,8 +79,9 @@ Table PostQualificationResult {
 
 Table Media {
   id String [pk]
-  file String [not null]
-  type String [not null]
+  fileName String [not null]
+  fileUrl String [not null]
+  origin String [not null]
   createdAt DateTime [default: `now()`, not null]
   deletedAt DateTime
   project Project
