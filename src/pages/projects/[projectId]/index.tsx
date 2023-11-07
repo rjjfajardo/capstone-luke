@@ -3,24 +3,6 @@ import Box from "@mui/material/Box";
 
 import { useHooks } from "../../../hooks/projects/projectDetails/hooks";
 
-const ProjectHeader = () => {
-  return (
-    <Box
-      border="1px solid red"
-      margin={0}
-      padding={0}
-      sx={{
-        position: "sticky",
-        top: 0,
-        // padding: 2,
-        zIndex: 1,
-      }}
-    >
-      Sticky Header
-    </Box>
-  );
-};
-
 const ProjectDetailPage = () => {
   const { projectId } = useHooks();
 

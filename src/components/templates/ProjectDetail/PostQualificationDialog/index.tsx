@@ -27,7 +27,7 @@ const PostQualificationDialog = ({
   return (
     <Dialog
       open={open}
-      dialogTitle={"Project Status"}
+      dialogTitle="Post Qualifacation"
       handleClose={handleResetAndClose}
       handleCancel={handleResetAndClose}
       handleSuccess={() => onSubmit()}
@@ -35,9 +35,7 @@ const PostQualificationDialog = ({
       cancelButtonLabel={"Close"}
       successButtonProps={{ variant: "contained", color: "primary" }}
       successButtonLabel={"Confirm"}
-      // disabled={disableButton}
     >
-      {/* <FormBase onSubmit={onSubmit}> */}
       <FormProvider {...formMethods}>
         <SelectInput
           control={control}

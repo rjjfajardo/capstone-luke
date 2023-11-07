@@ -1,27 +1,37 @@
+import yup from "@/lib/yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { CollectionOfReceiptDialogProps } from ".";
 import { useState } from "react";
 import axios from "axios";
 import { mutate } from "swr";
 import { useSession } from "next-auth/react";
-import { useForm } from "react-hook-form";
-import { PurchaseOrderProps } from ".";
 
 interface HookProps
-  extends Pick<PurchaseOrderProps, "handleClose" | "status" | "projectId"> {}
+  extends Pick<
+    CollectionOfReceiptDialogProps,
+    "handleClose" | "status" | "projectId"
+  > {}
+
+const schema = yup.object().shape({
+  dateOfSignature: yup.string().required(),
+});
 
 export const useHooks = ({ handleClose, projectId, status }: HookProps) => {
   const [file, setFile] = useState<{
     fileName: string | undefined;
     fileUrl: string | undefined;
   }>();
+  const { control, reset } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const { control, reset } = useForm();
+  const session = useSession();
 
   const handleResetAndClose = () => {
     reset();
     handleClose();
   };
-
-  const session = useSession();
 
   const updateProjectPhase = async () => {
     await axios

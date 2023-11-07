@@ -105,6 +105,7 @@ const Sidebar = (props: any) => {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: drawerWidth,
+            backgroundColor: "#2b3b5c",
           },
         }}
       >

@@ -1,45 +1,66 @@
 import Dialog from "@/components/parts/Dialog";
 import Box from "@mui/material/Box";
 
-import SelectInput from "@/components/parts/SelectInput";
-import TextInput from "@/components/parts/TextInput/index";
-import FileDropzone from "@/components/parts/FileDropzone";
-
+import { UploadDropzone } from "@/utils/uploadthing";
+import FilePreviewPanel from "@/components/parts/FilePreviewPanel";
+import { UploadFileResponse } from "uploadthing/client";
 import { useHooks } from "./hooks";
 
 export interface PurchaseOrderProps {
   projectId: string;
   open: boolean;
   handleClose: () => void;
+  status: string;
 }
 
 const PurchaseOrderDialog = ({
   projectId,
   open,
   handleClose,
+  status,
 }: PurchaseOrderProps) => {
-  const { control, handleResetAndClose, dropzoneConfig } = useHooks({
+  const { handleResetAndClose, file, setFile, onSubmit } = useHooks({
     handleClose,
+    projectId,
+    status,
   });
   return (
     <Dialog
       open={open}
-      dialogTitle={"Project Status"}
+      dialogTitle="Purchase Order"
+      info="Kindly upload supporting document."
       handleClose={handleResetAndClose}
       handleCancel={handleResetAndClose}
-      handleSuccess={() => {}}
+      handleSuccess={() => onSubmit()}
       cancelButtonProps={{ variant: "outlined", color: "primary" }}
       cancelButtonLabel={"Close"}
       successButtonProps={{ variant: "contained", color: "primary" }}
       successButtonLabel={"Confirm"}
-      // disabled={disableButton}
+      disabled={!file}
     >
-      <Box>
-        <FileDropzone
-          useDropzoneProps={dropzoneConfig}
-          dropzoneTitle="Drag and drop files here or click to add."
+      {file?.fileName && file.fileUrl ? (
+        <FilePreviewPanel
+          fileName={file.fileName}
+          fileUrl={file.fileUrl}
+          onRemove={() => setFile({ fileName: "", fileUrl: "" })}
         />
-      </Box>
+      ) : (
+        <Box>
+          <UploadDropzone
+            endpoint="bucketFiles"
+            onClientUploadComplete={(res: UploadFileResponse[] | undefined) => {
+              setFile({ fileName: res?.[0].name, fileUrl: res?.[0].url });
+            }}
+            onUploadError={(error: Error) => {
+              alert(`ERROR! ${error.message}`);
+            }}
+            onUploadBegin={(name) => {
+              // Do something once upload begins
+              console.log("Uploading: ", name);
+            }}
+          />
+        </Box>
+      )}
     </Dialog>
   );
 };

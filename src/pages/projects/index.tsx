@@ -1,12 +1,13 @@
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import PageTitle from "@/components/parts/PageTitlte";
 import { Stack, Box, Button } from "@mui/material";
 import TextInput from "@/components/parts/TextInput";
 import ProjectListTable from "@/components/templates/ProjectListTable";
 import { useHooks } from "../../hooks/projects/hooks";
+import PageTitle from "@/components/parts/PageTitlte";
 
 const ProjectListPage = () => {
   const { control } = useHooks();
+
   return (
     <>
       <PageTitle title="PROJECTS" />
