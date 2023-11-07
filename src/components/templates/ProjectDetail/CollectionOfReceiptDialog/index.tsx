@@ -3,23 +3,24 @@ import Box from "@mui/material/Box";
 
 // import TextInput from "@/components/parts/TextInput/index";
 import { useHooks } from "./hooks";
+
 import { UploadDropzone } from "@/utils/uploadthing";
 import FilePreviewPanel from "@/components/parts/FilePreviewPanel";
 import { UploadFileResponse } from "uploadthing/client";
 
-export interface AcceptanceProps {
+export interface CollectionOfReceiptDialogProps {
   projectId: string;
   open: boolean;
   handleClose: () => void;
   status: string;
 }
 
-const AcceptanceDialog = ({
+const CollectionOfReceiptDialog = ({
   projectId,
   open,
   handleClose,
   status,
-}: AcceptanceProps) => {
+}: CollectionOfReceiptDialogProps) => {
   const { handleResetAndClose, file, setFile, onSubmit } = useHooks({
     handleClose,
     projectId,
@@ -28,7 +29,7 @@ const AcceptanceDialog = ({
   return (
     <Dialog
       open={open}
-      dialogTitle="Acceptance"
+      dialogTitle="Collection Of Receipt"
       info="Kindly upload supporting document."
       handleClose={handleResetAndClose}
       handleCancel={handleResetAndClose}
@@ -68,4 +69,4 @@ const AcceptanceDialog = ({
   );
 };
 
-export default AcceptanceDialog;
+export default CollectionOfReceiptDialog;

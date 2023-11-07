@@ -4,13 +4,13 @@ import { useHooks } from "../../hooks/dashboard/hooks";
 import Loading from "@/components/parts/Loading";
 import { CtxOrReq } from "next-auth/client/_utils";
 import { getSession } from "next-auth/react";
+import LoginLayout from "@/components/templates/Layout/LoginLayout";
+import { getServerSession } from "next-auth";
 
 const DashboardPage = () => {
   const { user, status, projects } = useHooks();
 
-  console.log(projects);
-
-  if (status === "loading" && !projects) {
+  if (!user && !projects) {
     return <Loading />;
   }
 
@@ -27,17 +27,19 @@ const DashboardPage = () => {
 
 export default DashboardPage;
 
-// export async function getServerSideProps(context: CtxOrReq) {
-//   const session = await getSession(context);
-//   if (!session) {
-//     return {
-//       redirect: {
-//         destination: "/login",
-//       },
-//     };
-//   }
+export async function getServerSideProps(context: CtxOrReq) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
 
-//   return {
-//     props: {},
-//   };
-// }
+  return {
+    props: {
+      session,
+    },
+  };
+}

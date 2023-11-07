@@ -1,3 +1,5 @@
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Dialog, { DialogProps as MuiDialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -52,6 +54,8 @@ export interface DialogProps extends MuiDialogProps {
    * Disables/enables the success button.
    */
   disabled?: boolean;
+
+  info?: string;
 }
 
 const CustomDialog = styled(Dialog)(() => ({
@@ -73,6 +77,7 @@ const MuiDialog = (props: DialogProps) => {
     handleCancel,
     handleSuccess,
     dialogTitle,
+    info,
     children,
     dialogAction,
     cancelButtonProps,
@@ -86,6 +91,11 @@ const MuiDialog = (props: DialogProps) => {
   return (
     <CustomDialog onClose={handleClose} open={open} {...rest}>
       <DialogTitle>{dialogTitle}</DialogTitle>
+      {info && (
+        <Alert severity="info">
+          <strong>{info}</strong>
+        </Alert>
+      )}
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         {dialogAction}
