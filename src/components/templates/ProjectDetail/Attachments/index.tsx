@@ -4,6 +4,8 @@ import Box from "@mui/material/Box";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import FilePreviewPanel from "@/components/parts/FilePreviewPanel";
+import { Typography } from "@mui/material";
 
 //TODO: Put tabs eg ('Files' and 'Medias' and then group by from what status )
 interface Props {
@@ -28,8 +30,21 @@ const AttachmentsDrawer = ({ mobileHandleCloseDrawer, media }: Props) => {
           <CloseIcon />
         </IconButton>
       </Box>
-      {JSON.stringify(media)}
-      <Divider sx={{ marginTop: 1 }} />
+
+      <Divider sx={{ marginTop: 1, marginBottom: 5 }} />
+
+      {media.map(({ fileName, origin, fileUrl }) => (
+        <Stack key={fileUrl}>
+          <Typography fontSize={18} fontWeight={600}>
+            {origin}
+          </Typography>
+          <FilePreviewPanel
+            fileName={fileName}
+            fileUrl={fileUrl}
+            showDelete={false}
+          />
+        </Stack>
+      ))}
     </Stack>
   );
 };

@@ -9,6 +9,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -16,6 +17,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { SyntheticEvent, useState } from "react";
 import { useHooks } from "./hooks";
+import CompanyLogo from "@/assets/logo.png";
+import Image from "next/image";
 
 // const Search = styled("div")(({ theme }) => ({
 //   position: "relative",
@@ -197,28 +200,14 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
           >
             <MenuRoundedIcon sx={{ color: "#246BFD" }} />
           </IconButton>
-
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            color="#000000"
-            // sx={{ display: { xs: "bli", md: "block" } }}
-          >
-            SLEEK LOGO
-          </Typography>
-
+          <Stack gap={1} direction="row" alignItems="end">
+            <Image src={CompanyLogo} alt={""} width={50} height={50} />
+            <Typography variant="h6" noWrap component="div" color="#000000">
+              BBCS Data System Management
+            </Typography>
+          </Stack>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {/* <Link href="/notifications" passHref>
-              <Tooltip title="Notifications" sx={{ p: 0.5 }} arrow>
-                <IconButton size="large" color="inherit">
-                  <Badge color="error">
-                    <NotificationsRoundedIcon />
-                  </Badge>
-                </IconButton>
-              </Tooltip>
-            </Link> */}
             <IconButton
               size="large"
               edge="end"

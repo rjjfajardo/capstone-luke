@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { mutate } from "swr";
 
@@ -7,8 +7,13 @@ interface Steps {
   label: string;
 }
 
-export const useHooks = () => {
+interface useHooksProps {
+  postQualificationResult: string;
+}
+
+export const useHooks = ({ postQualificationResult }: useHooksProps) => {
   const session = useSession();
+  const ref = useRef<HTMLDivElement>(null);
 
   const steps: Steps[] = [
     {
@@ -54,7 +59,12 @@ export const useHooks = () => {
     currentIndex: number
   ): boolean => {
     for (let i = currentIndex; i < steps.length; i++) {
-      if (i < index || i >= index + 2 || index === i) {
+      if (
+        i < index ||
+        i >= index + 2 ||
+        index === i ||
+        postQualificationResult === "Disqualified"
+      ) {
         // Disable indexes before the specified index and two positions ahead
         // Adjust the condition based on your specific requirements
         // Return false for the disabled indexes
@@ -149,5 +159,6 @@ export const useHooks = () => {
     setOpenAcceptanceDialog,
     collectionOfReceiptDialog,
     setOpenCollectionOfReceiptDialog,
+    ref,
   };
 };

@@ -6,6 +6,7 @@ import { useHooks } from "./hooks";
 import { UploadDropzone } from "@/utils/uploadthing";
 import FilePreviewPanel from "@/components/parts/FilePreviewPanel";
 import { UploadFileResponse } from "uploadthing/client";
+import { DialogAlertMessage } from "@/common/alertMessage";
 
 export interface AcceptanceProps {
   projectId: string;
@@ -29,7 +30,7 @@ const AcceptanceDialog = ({
     <Dialog
       open={open}
       dialogTitle="Acceptance"
-      info="Kindly upload supporting document."
+      info={DialogAlertMessage}
       handleClose={handleResetAndClose}
       handleCancel={handleResetAndClose}
       handleSuccess={() => onSubmit()}

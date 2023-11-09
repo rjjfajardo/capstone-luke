@@ -60,17 +60,17 @@ const ProjectDetailDrawers = ({
   };
 
   const drawerButtons: DrawerButton[] = [
-    {
-      key: "Comments",
-      icon: <CommentIcon fontSize="inherit" />,
-      drawerContent: (
-        <CommentsDrawer
-          mobileHandleCloseDrawer={handleCloseDrawer}
-          projectId={projectId}
-          comments={comments}
-        />
-      ),
-    },
+    // {
+    //   key: "Comments",
+    //   icon: <CommentIcon fontSize="inherit" />,
+    //   drawerContent: (
+    //     <CommentsDrawer
+    //       mobileHandleCloseDrawer={handleCloseDrawer}
+    //       projectId={projectId}
+    //       comments={comments}
+    //     />
+    //   ),
+    // },
     {
       key: "Uploads",
       icon: <CloudUploadIcon fontSize="inherit" />,
@@ -82,16 +82,16 @@ const ProjectDetailDrawers = ({
         />
       ),
     },
-    {
-      key: "Activity Logs",
-      icon: <AvTimerIcon fontSize="inherit" />,
-      drawerContent: (
-        <ActivityLogsDrawer
-          mobileHandleCloseDrawer={handleCloseDrawer}
-          activityLog={activityLog}
-        />
-      ),
-    },
+    // {
+    //   key: "Activity Logs",
+    //   icon: <AvTimerIcon fontSize="inherit" />,
+    //   drawerContent: (
+    //     <ActivityLogsDrawer
+    //       mobileHandleCloseDrawer={handleCloseDrawer}
+    //       activityLog={activityLog}
+    //     />
+    //   ),
+    // },
   ];
 
   return (

@@ -31,87 +31,74 @@ const CommentsDrawer = ({
 }: Props) => {
   const { control, onSubmit, session } = useHooks({ projectId });
   return (
-    <Stack fontSize={20} fontWeight={600}>
-      <Typography fontWeight={600} fontSize={18}>
-        Comments
-      </Typography>
-      <FormBase onSubmit={onSubmit}>
-        <Box
-          mt={2}
-          display="flex"
-          alignItems="center"
-          gap={1}
-          color="#BCB7B7"
-          fontSize={14}
-        >
-          <Avatar>{session.data?.user.name}</Avatar>
-
-          <TextInput
-            control={control}
-            //  label="Add comment"
-            name="text"
-            formControlProps={{
-              sx: {
-                width: "88%",
-                "& .MuiOutlinedInput-notchedOutline": { borderColor: "none" },
-              },
-            }}
-          />
-          <IconButton
-            type="submit"
-            sx={{
-              width: 40,
-              height: 40,
-              backgroundColor: "primary.main",
-              borderRadius: 1,
-              color: "#FFFFFF",
-              "&:hover": {
-                backgroundColor: "#246BFD",
-              },
-            }}
-          >
-            <SendIcon />
-          </IconButton>
+    <>
+      <Stack fontSize={20} fontWeight={600}>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          Comments
         </Box>
-      </FormBase>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <IconButton
-          size="large"
-          onClick={() => mobileHandleCloseDrawer(false)}
-          sx={{ display: { md: "none", xs: "block" } }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      {/* <Divider sx={{ marginTop: 1 }} /> */}
+        <Divider sx={{ marginTop: 1 }} />
+        <FormBase onSubmit={onSubmit}>
+          <Box
+            mt={2}
+            display="flex"
+            alignItems="center"
+            gap={1}
+            color="#BCB7B7"
+            fontSize={14}
+          >
+            <Avatar>{session.data?.user.name}</Avatar>
 
-      <Stack
-        height={580}
-        maxHeight={580}
-        mt={4}
-        sx={{ overflowX: "hidden", overflowY: "auto" }}
-      >
-        {comments.map((c) => (
-          <>
-            <Box display="flex" justifyContent="space-between" mb={2} mt={1}>
-              <Box display="flex" alignItems="center" gap={1}>
-                <Avatar>{c.user.fullName[0]}</Avatar>
-                <Typography fontWeight={600}>{c.user.fullName}</Typography>
+            <TextInput
+              placeholder="Add comment"
+              control={control}
+              name="text"
+              formControlProps={{
+                sx: {
+                  width: "100%",
+                  "& .MuiOutlinedInput-notchedOutline": { borderColor: "none" },
+                },
+              }}
+            />
+            <IconButton
+              type="submit"
+              sx={{
+                width: 40,
+                height: 40,
+                backgroundColor: "primary.main",
+                borderRadius: 1,
+                color: "#FFFFFF",
+                "&:hover": {
+                  backgroundColor: "#246BFD",
+                },
+              }}
+            >
+              <SendIcon />
+            </IconButton>
+          </Box>
+        </FormBase>
+        <Stack overflow="auto" maxHeight={500}>
+          {comments.map((c) => (
+            <>
+              <Box display="flex" justifyContent="space-between" mb={2} mt={1}>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Avatar>{c.user.fullName[0]}</Avatar>
+                  <Typography fontWeight={600}>{c.user.fullName}</Typography>
+                </Box>
+                <Typography mr={2}>
+                  {formatDistance(new Date(c.createdAt), new Date(), {
+                    addSuffix: true,
+                  })}
+                </Typography>
               </Box>
-              <Typography mr={2}>
-                {formatDistance(new Date(c.createdAt), new Date(), {
-                  addSuffix: true,
-                })}
-              </Typography>
-            </Box>
-            <Box fontSize={13} fontWeight={400} ml={6}>
-              {c.text}
-            </Box>
-            <Divider sx={{ marginTop: 1 }} />
-          </>
-        ))}
+              <Box fontSize={13} fontWeight={400} ml={6}>
+                {c.text}
+              </Box>
+              <Divider sx={{ marginTop: 1 }} />
+            </>
+          ))}
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };
 export default CommentsDrawer;

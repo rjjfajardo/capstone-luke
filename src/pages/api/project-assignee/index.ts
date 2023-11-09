@@ -5,17 +5,15 @@ import { getSession } from "next-auth/react";
 async function getUserProjects(req: NextApiRequest, res: NextApiResponse) {
   const user = await getSession({ req });
 
-  // console.log("from assignee", user);
-
-  // if (!user) return;
-
   try {
     const projects = await prisma.projectAssignee.findMany({
       where: {
         userId: user?.user.id,
+        project: {
+          deletedAt: null,
+        },
       },
       select: {
-        // userId: true,
         user: {
           select: {
             fullName: true,

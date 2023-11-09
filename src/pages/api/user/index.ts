@@ -13,7 +13,11 @@ async function getUsers(req: NextApiRequest, res: NextApiResponse) {
 
   // return res.status(200).json(users);
 
-  const user = await prisma.user.findMany();
+  const user = await prisma.user.findMany({
+    include: {
+      projectAssignee: true,
+    },
+  });
 
   return res.status(200).json(user);
 }

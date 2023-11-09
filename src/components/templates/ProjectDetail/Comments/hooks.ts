@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 
 export const useHooks = ({ projectId }: { projectId: string }) => {
   const session = useSession();
-  console.log("session", session);
+
   const schema = yup.object().shape({
     text: yup.string().required(),
   });
@@ -26,7 +26,7 @@ export const useHooks = ({ projectId }: { projectId: string }) => {
         projectId,
       })
       .then(() => {
-        mutate(`/projects/${projectId}`);
+        mutate(`/project/${projectId}`);
         reset();
       });
   };

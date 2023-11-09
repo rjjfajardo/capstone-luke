@@ -52,8 +52,10 @@ model User {
   fullName           String?
   email              String            @unique
   password           String
+  dob                String?
+  contactNumber      String?
   role               String
-  image              String
+  image              String?
   verificationStatus Boolean           @default(false)
   createdAt          DateTime          @default(now())
   account            Account[]
@@ -61,6 +63,7 @@ model User {
   projectAssignee    ProjectAssignee[]
   activityLog        ActivityLog[]
   comment            Comment[]
+  deletedAt           DateTime? 
 }
 
 model Project {
@@ -85,6 +88,7 @@ model Project {
   projectAssignee         ProjectAssignee[]
   activityLog             ActivityLog[]
   comment                 Comment[]
+  deletedAt           DateTime?
 }
 
 model PostQualificationResult {
@@ -95,6 +99,7 @@ model PostQualificationResult {
   projectId  String  @unique
 
   createdAt DateTime @default(now())
+  deletedAt           DateTime?
 
   @@index([projectId])
 }
@@ -121,6 +126,7 @@ model ProjectAssignee {
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt DateTime?
 
   @@index([projectId, userId])
 }
@@ -138,6 +144,7 @@ model ActivityLog {
   //After state of the change
   after     Json
   createdAt DateTime @default(now())
+  deletedAt           DateTime?
 
   @@index([projectId])
 }
@@ -152,6 +159,7 @@ model Comment {
   userId    String
   text      String
   createdAt DateTime @default(now())
+  deletedAt           DateTime?
 
   @@index([projectId])
 }

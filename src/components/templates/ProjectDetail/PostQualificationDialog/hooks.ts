@@ -1,10 +1,10 @@
 import yup from "@/lib/yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { PostQualificationProps } from ".";
 import axios from "axios";
-import { mutate } from "swr";
 import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { mutate } from "swr";
+import { PostQualificationProps } from ".";
 
 interface HookProps
   extends Pick<
@@ -23,10 +23,6 @@ interface FormValues {
 }
 
 export const useHooks = ({ handleClose, projectId, status }: HookProps) => {
-  // const { handleSubmit, control, reset } = useForm<FormValues>({
-  //   resolver: yupResolver(schema),
-  // });
-
   const session = useSession();
 
   const formMethods = useForm<FormValues>({
