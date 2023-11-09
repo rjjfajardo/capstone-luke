@@ -5,13 +5,15 @@ import { Delete } from "@mui/icons-material";
 interface FilePreviewBoxProps {
   fileName: string;
   fileUrl: string;
-  onRemove: () => void;
+  onRemove?: () => void;
+  showDelete?: boolean;
 }
 
 const FilePreviewBox: React.FC<FilePreviewBoxProps> = ({
   fileName,
   fileUrl,
   onRemove,
+  showDelete = true,
 }) => {
   const handleDownload = () => {
     window.open(fileUrl, "_blank");
@@ -24,9 +26,11 @@ const FilePreviewBox: React.FC<FilePreviewBoxProps> = ({
         <Button variant="contained" color="primary" onClick={handleDownload}>
           Download
         </Button>
-        <IconButton color="secondary" onClick={onRemove}>
-          <Delete />
-        </IconButton>
+        {showDelete && (
+          <IconButton color="secondary" onClick={onRemove}>
+            <Delete />
+          </IconButton>
+        )}
       </Box>
     </Paper>
   );

@@ -14,24 +14,17 @@ import Checkbox from "@mui/material/Checkbox";
 import { Controller } from "react-hook-form";
 import { useHooks } from "./hooks";
 
-const EditProjectForm = ({ projectId }: { projectId: string }) => {
-  const {
-    control,
-    project,
-    // onSubmit,
-    // errors,
-    // dropzoneConfig,
-    // isTeamProjectEnabled,
-    // assigneeLimit,
-    // users,
-    // files,
-    // uploadMedia,
-  } = useHooks({ projectId });
-
-  //console.log(assigneeLimit);
+const EditProjectForm = ({
+  projectId,
+  setEditing,
+}: {
+  projectId: string;
+  setEditing: () => void;
+}) => {
+  const { control, onSubmit } = useHooks({ projectId, setEditing });
 
   return (
-    <FormBase onSubmit={() => console.log("asdfas")}>
+    <FormBase onSubmit={onSubmit}>
       <Grid container spacing={2} padding={2}>
         <Grid item xs={12} lg={6} zeroMinWidth>
           <TextInput
@@ -101,17 +94,17 @@ const EditProjectForm = ({ projectId }: { projectId: string }) => {
             formControlProps={{ fullWidth: true, sx: { mb: 3 } }}
             label="Priority"
           />
-          {/* 
-          <Stack direction="row" justifyContent="center" gap={2}>
+
+          <Stack direction="row" justifyContent="flex-end" gap={2}>
             <Button
               type="submit"
               color="primary"
               variant="contained"
               sx={{ width: 150 }}
             >
-              {"SUBMIT"}
+              Save Changes
             </Button>
-          </Stack> */}
+          </Stack>
         </Grid>
       </Grid>
     </FormBase>

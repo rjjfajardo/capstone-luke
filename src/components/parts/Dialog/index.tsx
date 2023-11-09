@@ -1,4 +1,4 @@
-import Alert from "@mui/material/Alert";
+import Alert, { AlertColor } from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Dialog, { DialogProps as MuiDialogProps } from "@mui/material/Dialog";
@@ -55,7 +55,10 @@ export interface DialogProps extends MuiDialogProps {
    */
   disabled?: boolean;
 
-  info?: string;
+  info?: {
+    severity: AlertColor;
+    message: string;
+  };
 }
 
 const CustomDialog = styled(Dialog)(() => ({
@@ -92,8 +95,8 @@ const MuiDialog = (props: DialogProps) => {
     <CustomDialog onClose={handleClose} open={open} {...rest}>
       <DialogTitle>{dialogTitle}</DialogTitle>
       {info && (
-        <Alert severity="info">
-          <strong>{info}</strong>
+        <Alert severity={info.severity ?? "info"}>
+          <strong>{info.message}</strong>
         </Alert>
       )}
       <DialogContent>{children}</DialogContent>

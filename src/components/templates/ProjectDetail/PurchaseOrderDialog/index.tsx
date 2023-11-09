@@ -5,6 +5,7 @@ import { UploadDropzone } from "@/utils/uploadthing";
 import FilePreviewPanel from "@/components/parts/FilePreviewPanel";
 import { UploadFileResponse } from "uploadthing/client";
 import { useHooks } from "./hooks";
+import { DialogAlertMessage } from "@/common/alertMessage";
 
 export interface PurchaseOrderProps {
   projectId: string;
@@ -28,7 +29,7 @@ const PurchaseOrderDialog = ({
     <Dialog
       open={open}
       dialogTitle="Purchase Order"
-      info="Kindly upload supporting document."
+      info={DialogAlertMessage}
       handleClose={handleResetAndClose}
       handleCancel={handleResetAndClose}
       handleSuccess={() => onSubmit()}

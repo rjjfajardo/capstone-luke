@@ -34,6 +34,7 @@ export const steps = [
 interface StatusTrailProps {
   projectId: string;
   status: string;
+  postQualificationResult: string;
 }
 
 interface PhaseItemStyledProps {
@@ -83,8 +84,8 @@ const PhaseItem = styled(Box)<PhaseItemStyledProps>(
       backgroundColor: isActive ? palette.primary.main : palette.grey[400],
       color: isActive ? palette.common.white : palette.common.black,
       cursor: isClickable ? "pointer" : "not-allowed",
-      // minWidth: "100px",
-      // width: 'auto'm,
+      minWidth: "100px",
+      width: "auto",
       height: "36px",
       flex: 1,
       flexGrow: 1,
@@ -101,7 +102,11 @@ const PhaseItem = styled(Box)<PhaseItemStyledProps>(
   }
 );
 
-const StatusTrail = ({ projectId, status }: StatusTrailProps) => {
+const StatusTrail = ({
+  projectId,
+  status,
+  postQualificationResult,
+}: StatusTrailProps) => {
   const {
     isAllowToUpdatePhase,
     findIndexByLabel,
@@ -117,58 +122,64 @@ const StatusTrail = ({ projectId, status }: StatusTrailProps) => {
     setOpenAcceptanceDialog,
     collectionOfReceiptDialog,
     setOpenCollectionOfReceiptDialog,
-  } = useHooks();
+    ref,
+  } = useHooks({
+    postQualificationResult,
+  });
 
   return (
-    <Box
-      sx={{
-        mt: 1,
-        mb: 2,
-        display: "flex",
-        overflowY: "auto",
-        "&::-webkit-scrollbar": {
-          width: "6px",
-          height: "6px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          backgroundColor: "grey.300",
-          borderRadius: "6px",
-        },
-        scrollbarWidth: "thin",
-        scrollbarColor: "transparent",
-      }}
-    >
-      {steps.map(({ label }, index) => (
-        <Tooltip title={label} key={label}>
-          <PhaseItem
-            isFirstPhase={!index}
-            isLastPhase={index + 1 === steps.length}
-            isActive={index <= findIndexByLabel(status, steps)}
-            isClickable={isAllowToUpdatePhase(
-              findIndexByLabel(status, steps),
-              index
-            )}
-            onClick={() => {
-              if (
-                isAllowToUpdatePhase(findIndexByLabel(status, steps), index)
-              ) {
-                handleStatusUpdate(label, projectId);
-              }
-            }}
-          >
-            <Typography
-              fontSize={14}
-              fontWeight={500}
-              lineHeight={"20px"}
-              textOverflow={"ellipsis"}
-              whiteSpace={"nowrap"}
-              overflow={"hidden"}
+    <>
+      <Box
+        ref={ref}
+        sx={{
+          mt: 1,
+          mb: 2,
+          display: "flex",
+          overflowY: "auto",
+          "&::-webkit-scrollbar": {
+            width: "6px",
+            height: "6px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "grey.300",
+            borderRadius: "6px",
+          },
+          scrollbarWidth: "auto",
+          scrollbarColor: "transparent",
+        }}
+      >
+        {steps.map(({ label }, index) => (
+          <Tooltip title={label} key={label}>
+            <PhaseItem
+              isFirstPhase={!index}
+              isLastPhase={index + 1 === steps.length}
+              isActive={index <= findIndexByLabel(status, steps)}
+              isClickable={isAllowToUpdatePhase(
+                findIndexByLabel(status, steps),
+                index
+              )}
+              onClick={() => {
+                if (
+                  isAllowToUpdatePhase(findIndexByLabel(status, steps), index)
+                ) {
+                  handleStatusUpdate(label, projectId);
+                }
+              }}
             >
-              {label}
-            </Typography>
-          </PhaseItem>
-        </Tooltip>
-      ))}
+              <Typography
+                fontSize={14}
+                fontWeight={500}
+                lineHeight={"20px"}
+                textOverflow={"ellipsis"}
+                whiteSpace={"nowrap"}
+                overflow={"hidden"}
+              >
+                {label}
+              </Typography>
+            </PhaseItem>
+          </Tooltip>
+        ))}
+      </Box>
 
       <PostQualificationDialog
         status={selectedPhaseName}
@@ -202,7 +213,7 @@ const StatusTrail = ({ projectId, status }: StatusTrailProps) => {
         open={acceptanceDialog}
         handleClose={() => setOpenAcceptanceDialog(false)}
       />
-    </Box>
+    </>
   );
 };
 

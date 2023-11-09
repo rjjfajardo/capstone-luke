@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `contactNumber` VARCHAR(191) NULL,
+    ADD COLUMN `dob` VARCHAR(191) NULL,
+    MODIFY `image` VARCHAR(191) NULL;

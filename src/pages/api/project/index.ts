@@ -101,32 +101,64 @@ async function getProjects(req: NextApiRequest, res: NextApiResponse) {
   // if (user?.user.role !== "admin")
   //   return res.status(400).send({ message: "Unauthorized access" });
 
-  const projects = await prisma.project.findMany({
-    select: {
-      id: true,
-      title: true,
-      referenceNumber: true,
-      approvedBudgetContract: true,
-      priority: true,
-      status: true,
-      projectAssignee: {
-        select: {
-          user: {
-            select: {
-              userId: true,
-              image: true,
-              fullName: true,
+  const { ref, status } = req.query;
+
+  if (ref !== undefined) {
+    const project = await prisma.project.findMany({
+      where: {
+        referenceNumber: String(ref) || undefined,
+      },
+      select: {
+        id: true,
+        title: true,
+        referenceNumber: true,
+        approvedBudgetContract: true,
+        priority: true,
+        status: true,
+        projectAssignee: {
+          select: {
+            user: {
+              select: {
+                userId: true,
+                image: true,
+                fullName: true,
+              },
             },
           },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+    });
 
-  return res.status(200).json(projects);
+    if (!project) return res.status(200).json({ message: "Project Not Found" });
+
+    return res.status(200).json(project);
+  } else {
+    const projects = await prisma.project.findMany({
+      select: {
+        id: true,
+        title: true,
+        referenceNumber: true,
+        approvedBudgetContract: true,
+        priority: true,
+        status: true,
+        projectAssignee: {
+          select: {
+            user: {
+              select: {
+                userId: true,
+                image: true,
+                fullName: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return res.status(200).json(projects);
+  }
 }
 
 export default async function handler(

@@ -1,55 +1,64 @@
+import Link from "@/components/parts/Link";
 import PageTitle from "@/components/parts/PageTitlte";
 import TextInput from "@/components/parts/TextInput";
 import StaffListTable from "@/components/templates/StaffListTable";
 import AddIcon from "@mui/icons-material/Add";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Grid, Stack, StyledEngineProvider } from "@mui/material";
 import { useHooks } from "../../hooks/staff/hooks";
-import Link from "@/components/parts/Link";
+
+import { CtxOrReq } from "next-auth/client/_utils";
+import { getSession } from "next-auth/react";
 
 const StaffListPage = () => {
-  const { control } = useHooks();
+  const { control, router } = useHooks();
   return (
-    <>
-      <PageTitle title="Staff" />
-
-      <Stack
-        border={1}
-        boxShadow={1}
-        borderRadius={1}
-        color="#f5f5f5"
-        p={2}
-        width="100%"
-        height="100vh"
-      >
-        <Stack
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          mb={3}
-          height={40}
-        >
-          <Box display="flex" gap={1}>
-            <TextInput
-              control={control}
-              name=""
-              placeholder="Search"
-              formControlProps={{ sx: { width: 500 } }}
-            />
-            <Button variant="contained">Search</Button>
-          </Box>
-          <Link href="/staff/new">
-            <Button
-              variant="contained"
-              sx={{ width: 140 }}
-              startIcon={<AddIcon />}
-            >
-              Add Staff
+    <StyledEngineProvider>
+      <PageTitle
+        title="STAFF"
+        actionButton={
+          <Button variant="contained" onClick={() => router.push("/staff/new")}>
+            Create New Staff
+          </Button>
+        }
+      />
+      <Grid container spacing={2} mb={2}>
+        <Grid item xs={12} lg={12}>
+          <Stack
+            boxShadow={2}
+            p={1}
+            borderRadius={1}
+            padding={2}
+            gap={2}
+            width={{ xs: 450, lg: "auto" }}
+          >
+            <TextInput control={control} name="project" placeholder="Search" />
+            <Button variant="contained" fullWidth>
+              Search
             </Button>
-          </Link>
-        </Stack>
-        <StaffListTable />
-      </Stack>
-    </>
+          </Stack>
+        </Grid>
+      </Grid>
+      <div style={{ width: "100%" }}>
+        <Box sx={{ height: 550, width: { xs: "32%", lg: "100%" } }}>
+          <StaffListTable />
+        </Box>
+      </div>
+    </StyledEngineProvider>
   );
 };
 export default StaffListPage;
+
+export async function getServerSideProps(context: CtxOrReq) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}

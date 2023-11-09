@@ -1,76 +1,102 @@
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
-import { styled } from "@mui/material";
-import Divider from "@mui/material/Divider";
+import { Alert, styled } from "@mui/material";
 import ProjectDetailDrawers from "./Drawers";
 
-import StatusTrail from "./StatusTrail";
-import { useHooks } from "./hooks";
 import { formatToPhp } from "@/lib/formatToPhp";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import StatusTrail from "./StatusTrail";
+import { useHooks } from "./hooks";
 // import EditProjectForm from "@/templates/";
-import EditProjectForm from "../EditProjectForm";
-import CommentsDrawer from "./Comments";
-import ActivityLogsDrawer from "./ActivityLogs";
-import DeleteIcon from "@mui/icons-material/Delete";
 import Loading from "@/components/parts/Loading";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditProjectForm from "../EditProjectForm";
+import ActivityLogsDrawer from "./ActivityLogs";
+import CommentsDrawer from "./Comments";
+import MoveToArchiveDialog from "./MoveToArchiveDialog";
+import { formatDistance } from "date-fns";
 
 const StyledBox = styled(Box)({
   display: "flex",
   gap: 10,
 });
 
-// const ProjectInfo = () => {
-//   return (
-//     <StyledBox>
-
-//     </StyledBox>
-//   )
-// }
-
-// const FixedHeader = styled(Box)(({ theme  }) => ({
-//   display: "flex",
-//   alignItems: "center",
-//   zIndex: 1,
-//   backgroundColor: "rgba(255, 255, 255, 0.8)",
-//   backdropFilter: "blur(6px)",
-//   position: "sticky",
-//   // top: isMobilePath ? -16 : 48 - 16,
-//   paddingTop: theme.spacing(3),
-//   paddingBottom: theme.spacing(1),
-//   paddingLeft: theme.spacing(3),
-//   paddingRight: theme.spacing(3),
-//   [theme.breakpoints.down("sm")]: {
-//     paddingLeft: theme.spacing(2),
-//     paddingRight: theme.spacing(2),
-//   },
-// }));
-
-// const ProjectHeader = () => {
-//   return (
-//     <FixedHeader>
-//       <Box>
-
-//       </Box>
-//     </FixedHeader>
-//   )
-// }
-
 const ProjectDetail = ({ projectId }: { projectId: string }) => {
-  const { data, isEditing, setIsEditing, isLoading } = useHooks(projectId);
+  const {
+    session,
+    data,
+    isEditing,
+    setIsEditing,
+    isLoading,
+    openMoveToArchiveDialog,
+    setOpenMoveToArchiveDialog,
+    handeClose,
+    statuses,
+  } = useHooks(projectId);
 
   if (isLoading) return <Loading />;
 
   return (
     <>
-      <Grid container spacing={1.5}>
-        <Grid item xs={12} lg={12}>
-          <Stack height={80} boxShadow={2} p={1} borderRadius={1} padding={2}>
+      {data?.postQualificationResult?.result === "Disqualified" && (
+        <Alert severity="error" className="">
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <strong>
+              This project can no longer be updated since it has been
+              disqualifed from Post Qualification Phase!
+            </strong>
+            {session.data?.user.role === "admin" && (
+              <Box
+                color="red"
+                fontWeight={600}
+                className="cursor-pointer"
+                onClick={() => setOpenMoveToArchiveDialog(true)}
+              >
+                Archive Project?
+              </Box>
+            )}
+          </Stack>
+        </Alert>
+      )}
+
+      {data?.status === "Acceptance" && (
+        <Alert severity="success" className="">
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <strong>
+              Project has already ended or reached its final phase.
+              Congratulations!
+            </strong>
+            {session.data?.user.role === "admin" && (
+              <Box
+                color={data.status === "Acceptance" ? "" : "red"}
+                fontWeight={600}
+                className="cursor-pointer"
+                onClick={() => setOpenMoveToArchiveDialog(true)}
+              >
+                Archive Project?
+              </Box>
+            )}
+          </Stack>
+        </Alert>
+      )}
+
+      <Grid container spacing={2}>
+        <Grid item xs={12} lg={12} display={{ md: "block", xs: "block" }}>
+          <Stack
+            height={80}
+            boxShadow={2}
+            p={1}
+            borderRadius={1}
+            padding={2}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             {" "}
             <Box
               sx={{
@@ -84,10 +110,27 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
                 {data?.title}
               </Typography>
             </Box>
+            <Box color="#BCB7B7">
+              {`Last updated: 
+              ${formatDistance(
+                new Date(data?.updatedAt ?? new Date()),
+                new Date(),
+                {
+                  addSuffix: true,
+                }
+              )}`}
+            </Box>
           </Stack>
         </Grid>
         <Grid item xs={12} lg={12}>
-          <Stack height={130} boxShadow={2} p={1} borderRadius={1} padding={2}>
+          <Stack
+            height={130}
+            boxShadow={2}
+            p={1}
+            borderRadius={1}
+            padding={2}
+            width={{ xs: 450, lg: "auto" }}
+          >
             <ProjectDetailDrawers
               priority={data?.priority || ""}
               projectId={projectId}
@@ -95,7 +138,13 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
               activityLog={data?.activityLog || []}
               media={data?.media || []}
             />
-            <StatusTrail status={data?.status || ""} projectId={projectId} />
+            <StatusTrail
+              status={data?.status || ""}
+              projectId={projectId}
+              postQualificationResult={
+                data?.postQualificationResult?.result || ""
+              }
+            />
           </Stack>
         </Grid>
 
@@ -121,14 +170,6 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
                   >
                     {"Cancel"}
                   </Button>
-                  <Button
-                    type="submit"
-                    color="primary"
-                    variant="contained"
-                    sx={{ width: 80 }}
-                  >
-                    {"Save"}
-                  </Button>
                 </Stack>
               ) : (
                 <>
@@ -144,6 +185,9 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
                       },
                     }}
                     onClick={() => setIsEditing(true)}
+                    disabled={
+                      (data?.status && statuses.includes(data?.status)) || false
+                    }
                   >
                     <ModeEditIcon />
                   </IconButton>
@@ -152,10 +196,18 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
             </Box>
             {isEditing ? (
               <>
-                <EditProjectForm projectId={projectId} />
+                <EditProjectForm
+                  projectId={projectId}
+                  setEditing={() => setIsEditing(false)}
+                />
               </>
             ) : (
-              <Stack display="flex" flexDirection="row" flexShrink={2} gap={6}>
+              <Stack
+                display="flex"
+                flexDirection={{ xs: "column", md: "row" }}
+                flexShrink={2}
+                gap={6}
+              >
                 <Box
                   sx={{
                     fontSize: 13,
@@ -246,19 +298,19 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
           </Stack>
         </Grid>
         <Grid item xs={12} lg={12}>
-          <Stack height="auto" boxShadow={2} p={1} borderRadius={1} padding={2}>
-            {/* <Typography fontSize={18} fontWeight={600} mb={1}>
-              {" "}
-              Activity Logs
-            </Typography> */}
-            {/* {data?.media.map((d) => (
-              <Box key={d.id} border={1} width="100%" p={2} mb={1}>
-                {d.file}
-              </Box>
-            ))} */}
+          <Stack boxShadow={2} p={1} borderRadius={1} padding={2}>
             <ActivityLogsDrawer
               activityLog={data?.activityLog || []}
-              mobileHandleCloseDrawer={() => console.log("s")}
+              mobileHandleCloseDrawer={() => {}}
+            />
+          </Stack>
+        </Grid>
+        <Grid item xs={12} lg={12}>
+          <Stack height="auto" boxShadow={2} p={1} borderRadius={1} padding={2}>
+            <CommentsDrawer
+              comments={data?.comment || []}
+              mobileHandleCloseDrawer={() => {}}
+              projectId={projectId}
             />
           </Stack>
           <Button
@@ -267,23 +319,19 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
             color="error"
             variant="outlined"
             sx={{ mt: 2 }}
-            onClick={() => setIsEditing(false)}
+            onClick={() => setOpenMoveToArchiveDialog(true)}
             startIcon={<DeleteIcon />}
           >
             {"Delete Project"}
           </Button>
         </Grid>
-
-        {/* <Grid item xs={12} lg={12}>
-          <Stack height={480} boxShadow={2} p={1} borderRadius={1} padding={2}>
-            <CommentsDrawer
-              projectId={projectId}
-              comments={data?.comment || []}
-              mobileHandleCloseDrawer={() => console.log("asdasd")}
-            />
-          </Stack>
-        </Grid> */}
       </Grid>
+
+      <MoveToArchiveDialog
+        open={openMoveToArchiveDialog}
+        handleClose={handeClose}
+        projectId={projectId}
+      />
     </>
   );
 };
