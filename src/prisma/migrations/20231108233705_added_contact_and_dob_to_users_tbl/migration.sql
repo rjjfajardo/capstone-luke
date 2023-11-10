@@ -1,4 +1,17 @@
 -- AlterTable
-ALTER TABLE `User` ADD COLUMN `contactNumber` VARCHAR(191) NULL,
-    ADD COLUMN `dob` VARCHAR(191) NULL,
-    MODIFY `image` VARCHAR(191) NULL;
+ALTER TABLE `ActivityLog` ADD COLUMN `deletedAt` DATETIME(3) NULL;
+
+-- AlterTable
+ALTER TABLE `Comment` ADD COLUMN `deletedAt` DATETIME(3) NULL;
+
+-- AlterTable
+ALTER TABLE `PostQualificationResult` ADD COLUMN `deletedAt` DATETIME(3) NULL;
+
+-- AlterTable
+ALTER TABLE `Project` ADD COLUMN `deletedAt` DATETIME(3) NULL;
+
+-- AlterTable
+ALTER TABLE `ProjectAssignee` ADD COLUMN `deletedAt` DATETIME(3) NULL;
+
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `deletedAt` DATETIME(3) NULL;
