@@ -1,54 +1,40 @@
-import { useForm } from "react-hook-form";
 import yup from "@/lib/yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
-import axios from "axios";
-import useSWR from "swr";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { Project } from "@prisma/client";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import useSWR, { mutate } from "swr";
 
-export interface FormValues {
-  title: string;
-  procuringEntity: string;
-  referenceNumber: string;
-  areaOfDelivery: string;
-  approvedBudgetContract: number;
-  procurementMode: string;
-  contractDuration: string;
-  priority: string;
-  //   assignee: string[];
-  //   files: {
-  //     file: string;
-  //     type: string;
-  //   }[];
-}
+export interface FormValues extends Project {}
 
-// const schema = yup.object().shape({
-//   title: yup.string().required(),
-//   procuringEntity: yup.string().required(),
-//   referenceNumber: yup.string().required(),
-//   areaOfDelivery: yup.string().required(),
-//   approvedBudgetContract: yup.number().required(),
-//   procurementMode: yup.string().required(),
-//   contractDuration: yup.string().required(),
-//   priority: yup.string().required(),
-//   // assignee: yup.array().of(yup.string().required("Assignee/s is required")),
-// });
+const schema = yup.object().shape({
+  title: yup.string().required(),
+  procuringEntity: yup.string().required(),
+  referenceNumber: yup.string().required(),
+  areaOfDelivery: yup.string().required(),
+  approvedBudgetContract: yup.number().required(),
+  procurementMode: yup.string().required(),
+  contractDuration: yup.string().required(),
+  priority: yup.string().required(),
+});
 
 interface UserFindAll {
   userId: string;
   fullName: string;
 }
 
-export const useHooks = ({ projectId }: { projectId: string }) => {
+export const useHooks = ({
+  projectId,
+  setEditing,
+}: {
+  projectId: string;
+  setEditing: () => void;
+}) => {
   const session = useSession();
-  //   const { data: users }: { data?: UserFindAll[] } = useSWR("/user");
   const { data: project }: { data: Project | undefined } = useSWR(
     `/project/${projectId}`
   );
-  // const [files, setFiles] = useState<FileType[]>([]);
-  // const [uploading, setUploading] = useState(false);
 
   const {
     control,
@@ -67,31 +53,26 @@ export const useHooks = ({ projectId }: { projectId: string }) => {
       procurementMode: project?.procurementMode,
       priority: project?.priority,
     },
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
     reValidateMode: "onChange",
     mode: "onSubmit",
   });
 
-  // const isTeamProjectEnabled = watch("isTeamProject") || false;
-
-  // const assigneeOptions =
-
-  //   const updateProject = async (data: FormValues) => {
-  //     console.log(data);
-  //     await axios
-  //       .post("/api/project", { ...data, files, userId: session.data?.user.id })
-  //       .then(() => {
-  //         reset();
-  //         alert("ALL GOOD");
-  //       });
-  //   };
+  const updateProject = async (data: FormValues) => {
+    await axios
+      .put(`/api/project/${projectId}`, {
+        ...data,
+        userId: session.data?.user.id,
+      })
+      .then(() => {
+        mutate(`/project/${projectId}`);
+        reset();
+        setEditing();
+      });
+  };
 
   return {
     control,
-    project,
-    // onSubmit: handleSubmit(createProject),
-    errors,
-    // files,
-    // users,
+    onSubmit: handleSubmit(updateProject),
   };
 };

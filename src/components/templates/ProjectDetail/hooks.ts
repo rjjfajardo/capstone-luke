@@ -1,3 +1,4 @@
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -11,6 +12,7 @@ export interface FindOneProject {
   contractDuration: string;
   priority: string;
   status: string;
+  updatedAt: Date;
   postQualificationResult: {
     result: string;
     dq_remarks: string;
@@ -42,7 +44,10 @@ export interface FindOneProject {
 }
 
 export const useHooks = (projectId: string) => {
+  const session = useSession();
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [openMoveToArchiveDialog, setOpenMoveToArchiveDialog] =
+    useState<boolean>(false);
   const {
     data,
     isLoading,
@@ -50,15 +55,27 @@ export const useHooks = (projectId: string) => {
     `/project/${projectId}`
   );
 
-  const [openChangeProjectStatusDialog, setOpenChangeProjectStatusDialog] =
-    useState(false);
+  const handeClose = () => {
+    setOpenMoveToArchiveDialog(false);
+  };
+
+  const statuses = [
+    "Purchase Order",
+    "Notice To Proceed",
+    "Post Qualification",
+    "Acceptance",
+    "Collection of Receipt",
+  ];
 
   return {
+    session,
     data,
     isEditing,
     setIsEditing,
     isLoading,
-    openChangeProjectStatusDialog,
-    setOpenChangeProjectStatusDialog,
+    handeClose,
+    openMoveToArchiveDialog,
+    setOpenMoveToArchiveDialog,
+    statuses,
   };
 };

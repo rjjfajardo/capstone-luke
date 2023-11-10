@@ -7,6 +7,7 @@ import { useHooks } from "./hooks";
 import { UploadDropzone } from "@/utils/uploadthing";
 import FilePreviewPanel from "@/components/parts/FilePreviewPanel";
 import { UploadFileResponse } from "uploadthing/client";
+import { DialogAlertMessage } from "@/common/alertMessage";
 
 export interface CollectionOfReceiptDialogProps {
   projectId: string;
@@ -30,7 +31,7 @@ const CollectionOfReceiptDialog = ({
     <Dialog
       open={open}
       dialogTitle="Collection Of Receipt"
-      info="Kindly upload supporting document."
+      info={DialogAlertMessage}
       handleClose={handleResetAndClose}
       handleCancel={handleResetAndClose}
       handleSuccess={() => onSubmit()}

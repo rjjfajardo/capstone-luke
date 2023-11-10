@@ -14,11 +14,6 @@ async function createComment(req: NextApiRequest, res: NextApiResponse) {
         projectId,
       },
     });
-
-    // await createActivityLog({
-
-    // })
-
     return res.status(200).json(comment);
   } catch (err: any) {
     console.log(err);
