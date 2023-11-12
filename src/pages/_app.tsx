@@ -1,11 +1,6 @@
-// import "@fontsource/roboto/400.css";
-// import "@fontsource/roboto/500.css";
-// import "@fontsource/roboto/700.css";
-
 import { ThemeProvider } from "@mui/material/styles";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { RecoilRoot } from "recoil";
 
 import Snackbar from "@/components/parts/Snackbar";
 import Layout from "@/components/templates/Layout";
@@ -13,15 +8,15 @@ import { swrConfig } from "@/lib/swr";
 import theme from "@/lib/theme";
 import { store } from "@/store/store";
 import CssBaseline from "@mui/material/CssBaseline";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";
 import { SWRConfig } from "swr";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
-import "@uploadthing/react/styles.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@uploadthing/react/styles.css";
 
 function App({
   Component,

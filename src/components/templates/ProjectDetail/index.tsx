@@ -4,29 +4,22 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-
-import { Alert, styled } from "@mui/material";
-import ProjectDetailDrawers from "./Drawers";
-
-import { formatToPhp } from "@/lib/formatToPhp";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import StatusTrail from "./StatusTrail";
-import { useHooks } from "./hooks";
-// import EditProjectForm from "@/templates/";
-import Loading from "@/components/parts/Loading";
+import Alert from "@mui/material/Alert";
+import { formatDistance } from "date-fns";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import { PurchaseOrderStatus } from "@prisma/client";
+
+import Link from "@/components/parts/Link";
+import ProjectDetailDrawers from "./Drawers";
+import Loading from "@/components/parts/Loading";
+import { formatToPhp } from "@/lib/formatToPhp";
 import EditProjectForm from "../EditProjectForm";
 import ActivityLogsDrawer from "./ActivityLogs";
 import CommentsDrawer from "./Comments";
 import MoveToArchiveDialog from "./MoveToArchiveDialog";
-import { formatDistance } from "date-fns";
-import Link from "@/components/parts/Link";
-import { PurchaseOrderStatus } from "@prisma/client";
-
-const StyledBox = styled(Box)({
-  display: "flex",
-  gap: 10,
-});
+import StatusTrail from "./StatusTrail";
+import { useHooks } from "./hooks";
 
 const ProjectDetail = ({ projectId }: { projectId: string }) => {
   const {
