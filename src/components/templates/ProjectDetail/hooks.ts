@@ -1,3 +1,4 @@
+import { PurchaseOrderStatus } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import useSWR from "swr";
@@ -41,6 +42,11 @@ export interface FindOneProject {
     };
     createdAt: string;
   }[];
+  purchaseOrder: {
+    status: PurchaseOrderStatus;
+    id: string;
+    deliveredAt: Date;
+  };
 }
 
 export const useHooks = (projectId: string) => {

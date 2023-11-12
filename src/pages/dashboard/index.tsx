@@ -1,14 +1,12 @@
+import Loading from "@/components/parts/Loading";
 import AdminDashboard from "@/components/templates/AdminDashboard";
 import StaffDashboard from "@/components/templates/StaffDashboard";
-import { useHooks } from "../../hooks/dashboard/hooks";
-import Loading from "@/components/parts/Loading";
 import { CtxOrReq } from "next-auth/client/_utils";
 import { getSession } from "next-auth/react";
-import LoginLayout from "@/components/templates/Layout/LoginLayout";
-import { getServerSession } from "next-auth";
+import { useHooks } from "../../hooks/dashboard/hooks";
 
 const DashboardPage = () => {
-  const { user, status, projects } = useHooks();
+  const { user, projects } = useHooks();
 
   if (!user && !projects) {
     return <Loading />;
@@ -18,7 +16,7 @@ const DashboardPage = () => {
     if (user?.user?.role === "admin") {
       return <AdminDashboard />;
     } else {
-      return <StaffDashboard projects={projects} />;
+      return <StaffDashboard data={projects} />;
     }
   };
 

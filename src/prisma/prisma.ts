@@ -25,7 +25,9 @@ prisma.$use(async (params, next) => {
     params.model == "PostQualificationResult" ||
     params.model == "ProjectAssignee" ||
     params.model == "ActivityLog" ||
-    params.model == "Comment"
+    params.model == "Comment" ||
+    params.model == "PurchaseOrder" ||
+    params.model == "PurchaseOrderMedia"
   ) {
     if (params.action == "delete" || params.action == "deleteMany") {
       if (params.action == "delete") {

@@ -2,7 +2,7 @@ import { prisma } from "@/prisma/prisma";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { createActivityLog } from "../activityLog";
-// function NotifyUserAssignee()
+import nodemailer from "nodemailer";
 
 async function createProject(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -15,9 +15,8 @@ async function createProject(req: NextApiRequest, res: NextApiResponse) {
     contractDuration,
     priority,
     userId,
+    assignee,
   } = req.body;
-
-  const { files, assignee } = req.body;
 
   try {
     return await prisma.$transaction(async (transaction) => {
@@ -31,21 +30,21 @@ async function createProject(req: NextApiRequest, res: NextApiResponse) {
           procurementMode,
           contractDuration,
           priority,
-          status: "Pre Bid",
         },
       });
 
       if (!project) return;
 
-      assignee.map(async (u: string) => {
-        const user = await transaction.projectAssignee.create({
-          data: {
-            userId: u,
-            projectId: project.id,
-          },
-        });
-        return user;
+      const assignees = assignee.map((userId: string) => ({
+        projectId: String(project.id),
+        userId,
+      }));
+
+      // const assignees = await assignee.map(async (u: string) => {
+      await transaction.projectAssignee.createMany({
+        data: assignees,
       });
+      // });
 
       await createActivityLog(transaction, {
         projectId: String(project.id),
@@ -54,42 +53,42 @@ async function createProject(req: NextApiRequest, res: NextApiResponse) {
         after: { values: [{ message: "created a project", userId }] },
       });
 
-      //TODO: Refactor this one for more effienciency since this takes time during the transaction process
-      // const transporter = nodemailer.createTransport({
-      //   port: 465,
-      //   host: process.env.MAIL_HOST,
-      //   auth: {
-      //     user: process.env.SMTP_USER,
-      //     pass: process.env.SMTP_PASSWORD,
-      //   },
-      //   secure: true,
-      // });
-      // const mailData = {
-      //   from: process.env.SMTP_USER,
-      //   to: "bgrace25@gmail.com",
-      //   subject: `You have been assign to a project`,
-      //   html: `<div>
-      //       Hello Blessy!
-      //       <a href="${process.env.NEXTAUTH_URL}/projects/${project.id}">link</a>.
+      const findUsersToEmail = await transaction.user.findMany({
+        where: {
+          userId: {
+            in: assignee,
+          },
+        },
+      });
 
-      //   <div>`,
-      // };
+      findUsersToEmail.map(async (user) => {
+        const transporter = nodemailer.createTransport({
+          port: 465,
+          host: process.env.MAIL_HOST,
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASSWORD,
+          },
+          secure: true,
+        });
+        const mailData = {
+          from: process.env.SMTP_USER,
+          to: user.email,
+          subject: `Project Assignment`,
+          html: `<div>
+          <p>Hello ${user.fullName},</p>
+          <p>
+            You have been assigned to a new project! Please find the details and information about the project by clicking the following link:
+            <a href="${process.env.NEXTAUTH_URL}/projects/${project.id}">Project Details</a>.
+          </p>
+          <p>
+            If you have any questions or need further clarification, feel free to reach out.
+          </p>
+        </div>`,
+        };
 
-      // await transporter.sendMail(mailData);
-
-      // const mediaPromises = files.map(
-      //   async (file: { file: string; fileType: string }) => {
-      //     const media = await transaction.media.create({
-      //       data: {
-      //         projectId: project.id,
-      //         file: file.file,
-      //         type: file.fileType,
-      //       },
-      //     });
-      //     return media;
-      //   }
-      // );
-      // await Promise.all(mediaPromises);
+        await transporter.sendMail(mailData);
+      });
       return res.status(200).send({});
     });
   } catch (err: any) {

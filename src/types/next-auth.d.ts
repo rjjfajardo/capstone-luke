@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import NextAuth, { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
@@ -15,6 +16,9 @@ declare module "next-auth" {
     user: {
       id: string;
       role: string;
+      fullName: string;
+      dob: string;
+      contactNumber: string;
     } & DefaultSession["user"];
   }
 }

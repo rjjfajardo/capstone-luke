@@ -29,24 +29,20 @@ const authOptions: NextAuthOptions = {
           where: {
             email: credentials.email,
           },
-          // select: {
-          //   userId: true,
-          //   fullName: true,
-          //   email: true,
-          //   password: true,
-          //   projectAssignee: {
-          //     select: {
-          //       project: {
-          //         select: {
-          //           title: true,
-          //           priority: true,
-          //           referenceNumber: true,
-          //           status: true,
-          //         },
-          //       },
-          //     },
-          //   },
-          // },
+          select: {
+            userId: true,
+            fullName: true,
+            email: true,
+            password: true,
+            dob: true,
+            contactNumber: true,
+            role: true,
+            verificationStatus: true,
+            createdAt: true,
+            account: true,
+            session: true,
+            projectAssignee: true,
+          },
         });
 
         if (!user) {

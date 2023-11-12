@@ -17,7 +17,6 @@ const adminLinks = [
     label: "Dashboard",
     path: "/dashboard",
   },
-  //TODO: change the route of this side menu
   {
     label: "Create Project",
     path: "/proposal/new",
@@ -30,12 +29,24 @@ const adminLinks = [
     label: "Employees",
     path: "/staff",
   },
+  {
+    label: "Orders",
+    path: "/order-management",
+  },
 ];
 
 const staffLinks = [
   {
     label: "Dashboard",
     path: "/dashboard",
+  },
+  {
+    label: "Orders",
+    path: "/order-management",
+  },
+  {
+    label: "Profile",
+    path: "/profile/me",
   },
 ];
 

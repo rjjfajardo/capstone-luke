@@ -11,6 +11,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  transpilePackages: ["@mui/x-charts"],
 };
 
 module.exports = nextConfig;

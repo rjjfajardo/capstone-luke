@@ -3,6 +3,8 @@ import yup from "@/lib/yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "@/lib/axios";
 import { User } from "@prisma/client";
+import { useSnackbar } from "@/hooks/useSnackbar";
+import { useRouter } from "next/router";
 
 interface UserI extends Partial<User> {}
 
@@ -13,7 +15,9 @@ const schema = yup.object().shape({
 });
 
 export const useHooks = () => {
-  const { control, handleSubmit } = useForm({
+  const router = useRouter();
+  const { setSnackbarProps } = useSnackbar();
+  const { control, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema),
     reValidateMode: "onChange",
     mode: "onSubmit",
@@ -28,10 +32,19 @@ export const useHooks = () => {
           values,
         },
       }).then((res) => {
-        console.log(res);
+        setSnackbarProps({
+          open: true,
+          message: "User creation was successful",
+          severity: "success",
+        });
+        router.push("/staff");
       });
     } catch (e) {
-      console.error(e);
+      setSnackbarProps({
+        open: true,
+        message: "Failed to create user",
+        severity: "error",
+      });
     }
   };
 

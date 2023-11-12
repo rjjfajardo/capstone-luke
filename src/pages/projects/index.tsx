@@ -7,6 +7,7 @@ import PageTitle from "@/components/parts/PageTitlte";
 
 import { CtxOrReq } from "next-auth/client/_utils";
 import { getSession } from "next-auth/react";
+import Link from "@/components/parts/Link";
 
 const ProjectListPage = () => {
   const { control, filter, appendRequestParamForFilter } = useHooks();
@@ -37,9 +38,20 @@ const ProjectListPage = () => {
         </Grid>
       </Grid>
       <div style={{ width: "100%" }}>
-        <Box sx={{ height: 550, width: { xs: "32%", lg: "100%" } }}>
+        <Box sx={{ height: 500, width: { xs: "32%", lg: "100%" } }}>
           <ProjectListTable searchValue={filter} />
         </Box>
+        <Link
+          href={`/projects/archive`}
+          sx={{
+            textDecoration: "underline",
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: 2,
+          }}
+        >
+          Archived List
+        </Link>
       </div>
     </StyledEngineProvider>
   );

@@ -9,6 +9,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import BadgeIcon from "@mui/icons-material/Badge";
 
 import WorkIcon from "@mui/icons-material/Work";
+import { AccountCircle, ShoppingCart } from "@mui/icons-material";
 
 function getItemButtonStyles(path: string, routerPath: string) {
   const activeStyle = {
@@ -49,6 +50,10 @@ export default function SidebarLinkMenu({ path, label, routerPathName }: any) {
         return <WorkIcon />;
       case "Employees":
         return <BadgeIcon />;
+      case "Orders":
+        return <ShoppingCart />;
+      case "Profile":
+        return <AccountCircle />;
       default:
         return null;
     }
