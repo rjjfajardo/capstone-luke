@@ -1,16 +1,12 @@
-import { Button, Avatar, Stack, Box } from "@mui/material";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
-import { UserWithProjectAssignee, useHooks } from "./hooks";
 import { User } from ".prisma/client";
-import Loading from "@/components/parts/Loading";
 import MoreVertMenu from "@/components/parts/MoreVertMenu";
+import { Avatar, Stack } from "@mui/material";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
 import { format } from "date-fns";
-import { styled } from "@mui/material/styles";
+import { UserWithProjectAssignee, useHooks } from "./hooks";
 
 const StaffListTable = () => {
   const { users } = useHooks();
-
-  if (!users?.length) return <Loading />;
 
   const columns: GridColDef<UserWithProjectAssignee>[] = [
     {

@@ -8,7 +8,9 @@ export interface UserWithProjectAssignee extends User {
 }
 
 export const useHooks = () => {
-  const { data: users }: { data?: UserWithProjectAssignee[] } = useSWR("/user");
+  const { data }: { data?: UserWithProjectAssignee[] } = useSWR("/user");
+
+  const users = data?.length ? data : [];
 
   return {
     users,
