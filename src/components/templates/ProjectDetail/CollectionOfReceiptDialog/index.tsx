@@ -46,6 +46,7 @@ const CollectionOfReceiptDialog = ({
           fileName={file.fileName}
           fileUrl={file.fileUrl}
           onRemove={() => setFile({ fileName: "", fileUrl: "" })}
+          showDownloadIcon={false}
         />
       ) : (
         <Box>

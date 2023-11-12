@@ -82,13 +82,8 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-  const handleSettings = () => {
-    router.push("/settings");
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
   const handleProfile = () => {
-    router.push("/profile");
+    router.push("/profile/me");
     setAnchorEl(null);
     handleMobileMenuClose();
   };
@@ -122,7 +117,6 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleProfile}>Profile</MenuItem>
-      <MenuItem onClick={handleSettings}>My account</MenuItem>
       <MenuItem
         onClick={() =>
           signOut({
@@ -152,17 +146,6 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <Link href="/notifications" passHref>
-        <MenuItem>
-          <IconButton size="large" aria-label="" color="inherit">
-            <Badge color="error">
-              <NotificationsRoundedIcon />
-            </Badge>
-          </IconButton>
-
-          <p>Notifications</p>
-        </MenuItem>
-      </Link>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"

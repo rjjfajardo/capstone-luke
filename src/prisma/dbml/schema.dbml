@@ -61,13 +61,15 @@ Table Project {
   priority String [not null]
   status String
   progress Decimal [not null, default: 0]
-  dateOfSignature DateTime
+  completedAt DateTime
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   media Media [not null]
   postQualificationResult PostQualificationResult
   projectAssignee ProjectAssignee [not null]
   activityLog ActivityLog [not null]
+  metrics Metrics [not null]
+  purchaseOrder PurchaseOrder
   comment Comment [not null]
   deletedAt DateTime
 }
@@ -116,6 +118,17 @@ Table ActivityLog {
   deletedAt DateTime
 }
 
+Table Metrics {
+  id String [pk]
+  project Project
+  projectId String
+  totalEarnings Decimal [not null]
+  month String [not null]
+  year String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  deletedAt DateTime
+}
+
 Table Comment {
   id String [pk]
   project Project
@@ -125,6 +138,31 @@ Table Comment {
   text String [not null]
   createdAt DateTime [default: `now()`, not null]
   deletedAt DateTime
+}
+
+Table PurchaseOrder {
+  id String [pk]
+  purchaseOrderNumber String [not null]
+  project Project [not null]
+  projectId String [unique, not null]
+  status PurchaseOrderStatus [not null, default: 'Ordered']
+  deliveredAt DateTime
+  purchaseOrderMedia PurchaseOrderMedia [not null]
+  createdAt DateTime [default: `now()`, not null]
+  deletedAt DateTime
+}
+
+Table PurchaseOrderMedia {
+  id String [pk]
+  purchaseOrder PurchaseOrder
+  purchaseOrderId String
+  fileName String [not null]
+  fileUrl String [not null]
+}
+
+Enum PurchaseOrderStatus {
+  Ordered
+  Delivered
 }
 
 Ref: Account.userId > User.userId [delete: Cascade]
@@ -143,6 +181,12 @@ Ref: ActivityLog.projectId > Project.id [delete: Cascade]
 
 Ref: ActivityLog.userId > User.userId
 
+Ref: Metrics.projectId > Project.id [delete: Cascade]
+
 Ref: Comment.projectId > Project.id [delete: Cascade]
 
 Ref: Comment.userId > User.userId
+
+Ref: PurchaseOrder.projectId - Project.id [delete: Cascade]
+
+Ref: PurchaseOrderMedia.purchaseOrderId > PurchaseOrder.id [delete: Cascade]

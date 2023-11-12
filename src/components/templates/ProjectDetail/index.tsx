@@ -20,6 +20,8 @@ import ActivityLogsDrawer from "./ActivityLogs";
 import CommentsDrawer from "./Comments";
 import MoveToArchiveDialog from "./MoveToArchiveDialog";
 import { formatDistance } from "date-fns";
+import Link from "@/components/parts/Link";
+import { PurchaseOrderStatus } from "@prisma/client";
 
 const StyledBox = styled(Box)({
   display: "flex",
@@ -122,7 +124,28 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
             </Box>
           </Stack>
         </Grid>
+
         <Grid item xs={12} lg={12}>
+          {data?.purchaseOrder !== null &&
+            data?.purchaseOrder.status !== PurchaseOrderStatus.Delivered && (
+              <Alert variant="standard" severity="info" sx={{ mb: 2 }}>
+                <Stack direction="row" gap={3}>
+                  <strong>
+                    Cannot proceed to{" "}
+                    <em
+                      style={{ fontWeight: 700, textDecoration: "underline" }}
+                    >
+                      Collection of Receipt
+                    </em>{" "}
+                    unless items are delivered.
+                  </strong>
+                  <Link href={`/order-management/${data?.purchaseOrder.id}`}>
+                    View More Information Here
+                  </Link>
+                </Stack>
+              </Alert>
+            )}
+
           <Stack
             height={130}
             boxShadow={2}
@@ -143,6 +166,10 @@ const ProjectDetail = ({ projectId }: { projectId: string }) => {
               projectId={projectId}
               postQualificationResult={
                 data?.postQualificationResult?.result || ""
+              }
+              isNotDelivered={
+                data?.purchaseOrder !== null &&
+                data?.purchaseOrder.status !== PurchaseOrderStatus.Delivered
               }
             />
           </Stack>

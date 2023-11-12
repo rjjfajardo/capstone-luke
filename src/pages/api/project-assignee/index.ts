@@ -26,6 +26,15 @@ async function getUserProjects(req: NextApiRequest, res: NextApiResponse) {
             priority: true,
             referenceNumber: true,
             status: true,
+            projectAssignee: {
+              select: {
+                user: {
+                  select: {
+                    fullName: true,
+                  },
+                },
+              },
+            },
           },
         },
       },

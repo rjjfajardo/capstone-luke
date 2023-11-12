@@ -4,18 +4,13 @@ import bcrypt from "bcrypt";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import nodemailer from "nodemailer";
-
+//eslint import/no-anonymous-default-export
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const userInfo: User = req.body.values;
-    // const rawDate = userInfo.dateOfBirth;
-    // const dateObj = new Date(rawDate);
-    // const bdate = dateObj.toISOString();
     const salt = bcrypt.genSaltSync(10);
-    // const tok = uuidv4();
     const userDetails = {
       email: userInfo.email,
-      // contactNumber: userInfo.con
       fullName: userInfo.fullName,
       password: bcrypt.hashSync(`${userInfo.fullName}2023`, salt),
       role: "staff",

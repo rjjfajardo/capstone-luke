@@ -6,6 +6,10 @@ import FilePreviewPanel from "@/components/parts/FilePreviewPanel";
 import { UploadFileResponse } from "uploadthing/client";
 import { useHooks } from "./hooks";
 import { DialogAlertMessage } from "@/common/alertMessage";
+import PurchaseOrderNewForm from "../../PurchaseOrderDetails";
+import TextInput from "@/components/parts/TextInput";
+import { Alert, Stack } from "@mui/material";
+import { SpecialZoomLevel, Viewer, Worker } from "@react-pdf-viewer/core";
 
 export interface PurchaseOrderProps {
   projectId: string;
@@ -20,7 +24,7 @@ const PurchaseOrderDialog = ({
   handleClose,
   status,
 }: PurchaseOrderProps) => {
-  const { handleResetAndClose, file, setFile, onSubmit } = useHooks({
+  const { handleResetAndClose, file, setFile, onSubmit, control } = useHooks({
     handleClose,
     projectId,
     status,
@@ -39,12 +43,34 @@ const PurchaseOrderDialog = ({
       successButtonLabel={"Confirm"}
       disabled={!file}
     >
+      <Alert variant="standard" severity="info" sx={{ mb: 2 }}>
+        <strong>
+          Make sure to input the the same purchase number written in the
+          attached document.
+        </strong>
+      </Alert>
+      <TextInput
+        name="purchaseOrderNumber"
+        control={control}
+        formControlProps={{ fullWidth: true, sx: { mb: 3 } }}
+        label="Purchase Order #"
+        hasRequiredLabel
+      />
       {file?.fileName && file.fileUrl ? (
-        <FilePreviewPanel
-          fileName={file.fileName}
-          fileUrl={file.fileUrl}
-          onRemove={() => setFile({ fileName: "", fileUrl: "" })}
-        />
+        <Stack direction="column" gap={2}>
+          <FilePreviewPanel
+            fileName={file.fileName}
+            fileUrl={file.fileUrl}
+            onRemove={() => setFile({ fileName: "", fileUrl: "" })}
+            showDownloadIcon={false}
+          />
+          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+            <Viewer
+              fileUrl={file.fileUrl || ""}
+              defaultScale={SpecialZoomLevel.ActualSize}
+            />
+          </Worker>
+        </Stack>
       ) : (
         <Box>
           <UploadDropzone

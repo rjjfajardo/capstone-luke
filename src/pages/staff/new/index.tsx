@@ -5,66 +5,63 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { Button, Grid, IconButton, Stack } from "@mui/material";
 import { useHooks } from "../../../hooks/staff/new/hooks";
 import FormBase from "@/components/parts/FormBase";
+import PageTitle from "@/components/parts/PageTitlte";
 
 const NewStaff = () => {
   const { control, onSubmit } = useHooks();
   return (
-    <Stack
-      height="auto"
-      boxShadow={1}
-      borderRadius={1}
-      sx={{ backgroundColor: "#ffffff" }}
-    >
+    <>
+      <PageTitle title="User Registration" sx={{ ml: 2 }} />
       <Grid container spacing={2} padding={2}>
         <Grid item xs={12} lg={6} zeroMinWidth>
-          <FormBase onSubmit={onSubmit}>
-            <TextInput
-              name="fullName"
-              control={control}
-              formControlProps={{ fullWidth: true, sx: { mb: 3 } }}
-              label="Full Name"
-              hasRequiredLabel
-            />
-            <TextInput
-              name="email"
-              control={control}
-              formControlProps={{ fullWidth: true, sx: { mb: 3 } }}
-              label="Email Address"
-              hasRequiredLabel
-            />
-
-            <Stack display="flex" flexDirection="row">
+          <Stack
+            height="auto"
+            boxShadow={1}
+            borderRadius={1}
+            sx={{ backgroundColor: "#ffffff" }}
+            p={2}
+          >
+            <FormBase onSubmit={onSubmit}>
               <TextInput
-                name="contactNumber"
+                name="fullName"
                 control={control}
-                formControlProps={{ sx: { mb: 3, mr: 1, width: "50%" } }}
-                label="Contact Number"
+                formControlProps={{ fullWidth: true, sx: { mb: 3 } }}
+                label="Full Name"
                 hasRequiredLabel
               />
-            </Stack>
+              <TextInput
+                name="email"
+                control={control}
+                formControlProps={{ fullWidth: true, sx: { mb: 3 } }}
+                label="Email Address"
+                hasRequiredLabel
+              />
 
-            <Stack direction="row" gap={2} mt={5}>
-              {/* <Button
-              type="submit"
-              color="primary"
-              variant="outlined"
-              sx={{ width: 150 }}
-            >
-              {"Password Reset"}
-            </Button> */}
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                sx={{ width: 150 }}
-              >
-                Create User
-              </Button>
-            </Stack>
-          </FormBase>
+              <Stack display="flex" flexDirection="row">
+                <TextInput
+                  name="contactNumber"
+                  control={control}
+                  formControlProps={{ sx: { mb: 3, mr: 1, width: "50%" } }}
+                  label="Contact Number"
+                  hasRequiredLabel
+                />
+              </Stack>
+
+              <Stack direction="row" gap={2} mt={5}>
+                <Button
+                  type="submit"
+                  color="primary"
+                  variant="contained"
+                  sx={{ width: 150 }}
+                >
+                  Create User
+                </Button>
+              </Stack>
+            </FormBase>
+          </Stack>
         </Grid>
       </Grid>
-    </Stack>
+    </>
   );
 };
 

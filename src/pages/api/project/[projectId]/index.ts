@@ -4,7 +4,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 // import { ValidationError } from "yup";
 // import { getSession } from "next-auth/react";
 import { createActivityLog } from "../../activityLog";
-import { Project } from "@prisma/client";
+import { Prisma, Project } from "@prisma/client";
+import { format } from "date-fns";
 
 async function getProject(req: NextApiRequest, res: NextApiResponse) {
   // const user = await getSession({ req });
@@ -37,6 +38,7 @@ async function getProject(req: NextApiRequest, res: NextApiResponse) {
         contractDuration: true,
         priority: true,
         status: true,
+        progress: true,
         updatedAt: true,
         postQualificationResult: {
           select: {
@@ -81,6 +83,13 @@ async function getProject(req: NextApiRequest, res: NextApiResponse) {
             createdAt: "desc",
           },
         },
+        purchaseOrder: {
+          select: {
+            status: true,
+            id: true,
+            deliveredAt: true,
+          },
+        },
       },
     });
     res.status(200).json(project);
@@ -106,6 +115,7 @@ async function updateProject(req: NextApiRequest, res: NextApiResponse) {
       procurementMode,
       contractDuration,
       priority,
+      purchaseOrderNumber,
     } = req.body;
 
     const updateProjectDto: Object = {
@@ -165,6 +175,7 @@ async function updateProject(req: NextApiRequest, res: NextApiResponse) {
           },
           data: {
             status,
+            ...(status === "Acceptance" ? { completedAt: new Date() } : {}),
           },
         });
 
@@ -237,6 +248,27 @@ async function updateProject(req: NextApiRequest, res: NextApiResponse) {
               ],
             },
           });
+
+          const purchaseOrder = await transaction.purchaseOrder.create({
+            data: {
+              purchaseOrderNumber,
+              projectId: String(req.query.projectId),
+            },
+          });
+
+          await createActivityLog(transaction, {
+            projectId: String(req.query.projectId),
+            userId,
+            before: { values: [] },
+            after: {
+              values: [
+                {
+                  message: `created a purchase order for tracking`,
+                  info: `${purchaseOrder.id}`,
+                },
+              ],
+            },
+          });
         }
         if (status === "Collection of Receipt") {
           await transaction.media.create({
@@ -264,12 +296,13 @@ async function updateProject(req: NextApiRequest, res: NextApiResponse) {
         if (status === "Acceptance") {
           await transaction.media.create({
             data: {
-              projectId: project.id,
+              projectId: String(req.query.projectId),
               fileUrl: file.fileUrl,
               fileName: file.fileName,
               origin: "Acceptance",
             },
           });
+
           await createActivityLog(transaction, {
             projectId: String(req.query.projectId),
             userId,
@@ -282,12 +315,35 @@ async function updateProject(req: NextApiRequest, res: NextApiResponse) {
               ],
             },
           });
+
+          const project = await transaction.project.findUnique({
+            where: { id: String(req.query.projectId) },
+          });
+
+          if (project && project.completedAt) {
+            const totalEarningMinusVat =
+              Number(project.approvedBudgetContract) -
+              Number(project.approvedBudgetContract) * 0.12;
+
+            await transaction.metrics.create({
+              data: {
+                projectId: String(req.query.projectId),
+                totalEarnings: totalEarningMinusVat,
+                month: format(new Date(project.completedAt), "MMMM").substring(
+                  0,
+                  3
+                ),
+                year: format(new Date(project.completedAt), "yyyy"),
+              },
+            });
+          }
         }
       }
 
       res.status(200).json({});
     });
   } catch (err) {
+    console.log(err);
     res.status(400).send({ message: err });
   }
 }

@@ -1,17 +1,23 @@
-// export const useHooks = () => {
-//   const getColor = (priority: string) => {
-//     switch (priority) {
-//       case "High":
-//         return "#FF0000";
-//       case "Medium":
-//         return "#FFB800";
-//       case "Low":
-//         return "#0075FF";
-//       default:
-//     }
-//   };
+import { User } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
-//   return {
-//     getColor,
-//   };
-// };
+// interface SessionI
+//   extends Pick<
+//     Session,
+//     | "role"
+//     | "contactNumber"
+//     | "createdAt"
+//     | "deletedAt"
+//     | "dob"
+//     | "email"
+//     | "expires"
+//     | "fullName"
+//   > {}
+
+export const useHooks = () => {
+  const session = useSession();
+
+  return {
+    session,
+  };
+};

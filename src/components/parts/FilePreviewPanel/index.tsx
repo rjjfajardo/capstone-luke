@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Button, IconButton, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  SxProps,
+  Typography,
+} from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
 interface FilePreviewBoxProps {
@@ -7,6 +14,9 @@ interface FilePreviewBoxProps {
   fileUrl: string;
   onRemove?: () => void;
   showDelete?: boolean;
+  onClick?: () => void;
+  showDownloadIcon?: boolean;
+  sx?: SxProps;
 }
 
 const FilePreviewBox: React.FC<FilePreviewBoxProps> = ({
@@ -14,20 +24,28 @@ const FilePreviewBox: React.FC<FilePreviewBoxProps> = ({
   fileUrl,
   onRemove,
   showDelete = true,
+  showDownloadIcon = true,
+  onClick,
+  sx,
 }) => {
   const handleDownload = () => {
     window.open(fileUrl, "_blank");
   };
 
   return (
-    <Paper elevation={3} style={{ padding: "16px", marginBottom: "16px" }}>
-      <Typography variant="subtitle1">{fileName}</Typography>
-      <Box mt={1}>
-        <Button variant="contained" color="primary" onClick={handleDownload}>
-          Download
-        </Button>
+    <Paper elevation={3} sx={{ padding: "16px", ...sx }} onClick={onClick}>
+      <Box mt={1} display="flex" justifyContent="space-between">
+        <Typography variant="subtitle1" textOverflow="ellipsis">
+          {fileName}
+        </Typography>
+
+        {showDownloadIcon && (
+          <Button variant="contained" color="primary" onClick={handleDownload}>
+            Download
+          </Button>
+        )}
         {showDelete && (
-          <IconButton color="secondary" onClick={onRemove}>
+          <IconButton color="primary" onClick={onRemove}>
             <Delete />
           </IconButton>
         )}

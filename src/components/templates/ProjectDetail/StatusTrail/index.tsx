@@ -23,6 +23,7 @@ export const steps = [
   {
     label: "Purchase Order",
   },
+
   {
     label: "Collection of Receipt",
   },
@@ -35,6 +36,7 @@ interface StatusTrailProps {
   projectId: string;
   status: string;
   postQualificationResult: string;
+  isNotDelivered: boolean;
 }
 
 interface PhaseItemStyledProps {
@@ -106,6 +108,7 @@ const StatusTrail = ({
   projectId,
   status,
   postQualificationResult,
+  isNotDelivered,
 }: StatusTrailProps) => {
   const {
     isAllowToUpdatePhase,
@@ -125,6 +128,7 @@ const StatusTrail = ({
     ref,
   } = useHooks({
     postQualificationResult,
+    isNotDelivered,
   });
 
   return (

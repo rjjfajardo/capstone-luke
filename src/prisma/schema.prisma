@@ -14,13 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// enum Status {
-//   PREBID
-//   Video
-//   Doc
-//   File
-// }
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -63,7 +56,7 @@ model User {
   projectAssignee    ProjectAssignee[]
   activityLog        ActivityLog[]
   comment            Comment[]
-  deletedAt           DateTime? 
+  deletedAt          DateTime?
 }
 
 model Project {
@@ -77,18 +70,20 @@ model Project {
   contractDuration       Decimal
   priority               String
 
-  status          String?
-  progress        Decimal   @default(0)
-  dateOfSignature DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  status      String?
+  progress    Decimal   @default(0)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   media                   Media[]
   postQualificationResult PostQualificationResult?
   projectAssignee         ProjectAssignee[]
   activityLog             ActivityLog[]
+  metrics                 Metrics[]
+  purchaseOrder           PurchaseOrder?           
   comment                 Comment[]
-  deletedAt           DateTime?
+  deletedAt               DateTime?
 }
 
 model PostQualificationResult {
@@ -98,16 +93,16 @@ model PostQualificationResult {
   project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId  String  @unique
 
-  createdAt DateTime @default(now())
-  deletedAt           DateTime?
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
 
   @@index([projectId])
 }
 
 model Media {
   id        String    @id @default(cuid())
-  fileName      String
-  fileUrl      String
+  fileName  String
+  fileUrl   String
   //This will determine the status{'POST QUAL', "NOTICE TO PROCEED, 'COOLECTION OF RECEIPT", "Aceeptance"} origin of files/medias 
   origin    String
   createdAt DateTime  @default(now())
@@ -119,13 +114,13 @@ model Media {
 }
 
 model ProjectAssignee {
-  id        String   @id @default(cuid())
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id        String    @id @default(cuid())
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String
-  user      User     @relation(fields: [userId], references: [userId])
+  user      User      @relation(fields: [userId], references: [userId])
   userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
   @@index([projectId, userId])
@@ -137,16 +132,29 @@ model ActivityLog {
   project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String?
 
-  user      User     @relation(fields: [userId], references: [userId])
+  user      User      @relation(fields: [userId], references: [userId])
   userId    String
   //Before state of the change
   before    Json
   //After state of the change
   after     Json
-  createdAt DateTime @default(now())
-  deletedAt           DateTime?
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
 
   @@index([projectId])
+}
+
+model Metrics {
+  id String @id @default(cuid())
+
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String?
+
+  totalEarnings Decimal
+  month         String
+  year          String
+  createdAt     DateTime  @default(now())
+  deletedAt     DateTime?
 }
 
 model Comment {
@@ -155,11 +163,40 @@ model Comment {
   project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId String?
 
-  user      User     @relation(fields: [userId], references: [userId])
+  user      User      @relation(fields: [userId], references: [userId])
   userId    String
   text      String
-  createdAt DateTime @default(now())
-  deletedAt           DateTime?
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
 
   @@index([projectId])
+}
+
+model PurchaseOrder {
+  id                  String @id @default(cuid())
+  purchaseOrderNumber String
+
+  project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String  @unique
+  status PurchaseOrderStatus @default(Ordered)
+
+  deliveredAt        DateTime?
+  purchaseOrderMedia PurchaseOrderMedia[]
+  createdAt          DateTime             @default(now())
+  deletedAt          DateTime?
+}
+
+enum PurchaseOrderStatus {
+  Ordered
+  Delivered
+}
+
+model PurchaseOrderMedia {
+  id String @id @default(cuid())
+
+  purchaseOrder   PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  purchaseOrderId String?
+
+  fileName String
+  fileUrl  String
 }

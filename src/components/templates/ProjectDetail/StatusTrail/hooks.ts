@@ -9,9 +9,13 @@ interface Steps {
 
 interface useHooksProps {
   postQualificationResult: string;
+  isNotDelivered: boolean;
 }
 
-export const useHooks = ({ postQualificationResult }: useHooksProps) => {
+export const useHooks = ({
+  postQualificationResult,
+  isNotDelivered,
+}: useHooksProps) => {
   const session = useSession();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -63,7 +67,8 @@ export const useHooks = ({ postQualificationResult }: useHooksProps) => {
         i < index ||
         i >= index + 2 ||
         index === i ||
-        postQualificationResult === "Disqualified"
+        postQualificationResult === "Disqualified" ||
+        isNotDelivered
       ) {
         // Disable indexes before the specified index and two positions ahead
         // Adjust the condition based on your specific requirements

@@ -17,8 +17,11 @@ import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";
 import { SWRConfig } from "swr";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 import "@uploadthing/react/styles.css";
+import "@react-pdf-viewer/core/lib/styles/index.css";
 
 function App({
   Component,
@@ -35,7 +38,7 @@ function App({
       </Head>
 
       <ThemeProvider theme={theme}>
-        <RecoilRoot>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <CssBaseline />
           <SWRConfig value={swrConfig}>
             <SessionProvider session={session}>
@@ -44,8 +47,9 @@ function App({
               </Layout>
             </SessionProvider>
           </SWRConfig>
-        </RecoilRoot>
-        <Snackbar />
+
+          <Snackbar />
+        </LocalizationProvider>
       </ThemeProvider>
     </Provider>
   );
