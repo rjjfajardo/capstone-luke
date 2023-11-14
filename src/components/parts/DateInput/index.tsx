@@ -33,11 +33,6 @@ const DateInput: React.FC<DateInputProps> = ({
           onChange={(newValue) =>
             onChange(format(newValue ? newValue : new Date(), "yyyy-mm-dd"))
           }
-          // slotProps={{
-          //   textField: {
-          //     helperText: error?.message,
-          //   },
-          // }}
           minDate={minDate}
           maxDate={maxDate}
         />

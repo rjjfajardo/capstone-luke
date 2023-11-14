@@ -14,7 +14,6 @@ export default function Snackbar() {
   } = snackbarProps as SnackProps;
 
   const onClose = () => {
-    // Keep `message` because there is the transition animation.
     setSnackbarProps({ message, severity, open: false });
   };
 

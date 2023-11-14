@@ -15,7 +15,7 @@ const OrderManagementPage = () => {
   return (
     <StyledEngineProvider>
       <PageTitle title="ORDER MANAGEMENT" />
-      <Grid container spacing={2} mb={2}>
+      {/* <Grid container spacing={2} mb={2}>
         <Grid item xs={12} lg={12}>
           {session.data?.user.role === "admin" && (
             <Stack
@@ -37,7 +37,7 @@ const OrderManagementPage = () => {
             </Stack>
           )}
         </Grid>
-      </Grid>
+      </Grid> */}
       <div style={{ width: "100%" }}>
         <Box sx={{ height: 550, width: { xs: "39%", lg: "auto", md: "53%" } }}>
           <PurchaseOrderListTable />

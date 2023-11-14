@@ -25,9 +25,7 @@ interface FormBaseProps<V> extends Omit<BoxProps<"form">, "onSubmit"> {
  */
 const FormBase = <V,>(props: FormBaseProps<V>) => {
   const { onSubmit, children, ...rest } = props;
-  /**
-   * Enterキーを押したときに、フォームを送信しないようにする
-   */
+
   const preventEnterKeySubmit = (e: any) => {
     if (
       e.key === "Enter" &&
@@ -43,11 +41,6 @@ const FormBase = <V,>(props: FormBaseProps<V>) => {
       component="form"
       onSubmit={onSubmit}
       onKeyDown={preventEnterKeySubmit}
-      /**
-       * DataGrid用
-       * DataGrid内にあるinputはonKeyDownがここまで届かないのでonKeyPressで対応する
-       * 本来onKeyPressは非推奨だが、onKeyDownは効かないのでここでは使う
-       */
       onKeyPress={preventEnterKeySubmit}
       {...rest}
     >

@@ -69,6 +69,14 @@ export async function getServerSideProps(context: CtxOrReq) {
     };
   }
 
+  if (session.user.role !== "admin") {
+    return {
+      redirect: {
+        destination: "/404",
+      },
+    };
+  }
+
   return {
     props: {},
   };

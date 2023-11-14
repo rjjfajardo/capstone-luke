@@ -59,18 +59,10 @@ function SelectInput(props: SelectInputProps) {
       <Select
         {...rest}
         value={rest.value ?? []}
-        // variant="outlined"
         sx={{
           backgroundColor: "#FCFDFE",
-          // border: 1,
           borderColor: "#F0F1F7",
         }}
-        // sx={{
-        //   backgroundColor: "#FCFDFE",
-        //   "& .MuiOutlinedInput-notchedOutline": { borderColor: "#F0F1F7" },
-        //   //"& . MuiInputBase-input-MuiOutlinedInput-input": { outline: "none" }, //TODO: disable focused color
-        // }}
-        // helperText={helperText}
         error={!!error}
         disabled={disabled}
         multiple={multiple}
