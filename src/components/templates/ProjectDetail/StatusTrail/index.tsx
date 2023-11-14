@@ -1,11 +1,13 @@
-import { Tooltip, Typography, styled } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import AcceptanceDialog from "../AcceptanceDialog";
+import CollectionOfReceiptDialog from "../CollectionOfReceiptDialog";
 import NoticeToProceedDialog from "../NoticeToProceedDialog";
 import PostQualificationDialog from "../PostQualificationDialog";
 import PurchaseOrderDialog from "../PurchaseOrderDialog";
+import { styled } from "@mui/material/styles";
+
 import { useHooks } from "./hooks";
-import CollectionOfReceiptDialog from "../CollectionOfReceiptDialog";
 
 export const steps = [
   {

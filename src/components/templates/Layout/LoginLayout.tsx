@@ -27,7 +27,6 @@ const LoginLayout = (props: { children: ReactNode }) => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* <DocumentTitle title={capitalize(router.pathname.split("/")[1])} /> */}
       <Navbar
         drawerWidth={String(drawerWidth)}
         handleDrawerToggle={handleDrawerToggle}
@@ -37,7 +36,6 @@ const LoginLayout = (props: { children: ReactNode }) => {
         drawerWidth={drawerWidth}
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
-        // userRole={session?.user?.role}
       />
       <Box
         component="main"

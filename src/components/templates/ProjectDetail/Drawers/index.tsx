@@ -1,12 +1,8 @@
-import AvTimerIcon from "@mui/icons-material/AvTimer";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import CommentIcon from "@mui/icons-material/Comment";
-import { Box, Drawer, IconButton, Tooltip, Stack } from "@mui/material";
-import { useState } from "react";
-import ActivityLogsDrawer from "../ActivityLogs";
-import AttachmentsDrawer from "../Attachments";
-import CommentsDrawer from "../Comments";
 import { getColor } from "@/lib/getColor";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Box, Drawer, IconButton, Stack, Tooltip } from "@mui/material";
+import { useState } from "react";
+import AttachmentsDrawer from "../Attachments";
 
 type DrawerButton = {
   key: string;

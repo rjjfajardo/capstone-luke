@@ -21,7 +21,7 @@ const StaffListPage = () => {
           </Button>
         }
       />
-      <Grid container spacing={2} mb={2}>
+      {/* <Grid container spacing={2} mb={2}>
         <Grid item xs={12} lg={12}>
           <Stack
             boxShadow={2}
@@ -37,7 +37,7 @@ const StaffListPage = () => {
             </Button>
           </Stack>
         </Grid>
-      </Grid>
+      </Grid> */}
       <div style={{ width: "100%" }}>
         <Box sx={{ height: 550, width: { xs: "32%", lg: "100%" } }}>
           <StaffListTable />

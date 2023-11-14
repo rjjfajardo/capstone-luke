@@ -11,13 +11,10 @@ const rootStyles = {
   borderWidth: "thin",
   cursor: "pointer",
   color: "primary.main",
-  //backgroundColor: "background.default",
-  //   "&:hover": {
-  //     borderColor: (theme: any) => theme.palette.common.black,
-  //   },
+
   "&:focus-within": {
     borderColor: "primary.main",
-    //: (theme: any) => alpha(theme.palette.primary.main, 0.1),
+
     color: "primary.main",
   },
   marginBottom: 2,
