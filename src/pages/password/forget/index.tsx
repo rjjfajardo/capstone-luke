@@ -5,9 +5,10 @@ import TextInput from "@/components/parts/TextInput";
 import NonLoginForm from "@/components/templates/Layout/NonLoginFormLayout";
 
 import { useHooks } from "../../../hooks/password/forget/hooks";
+import Link from "@/components/parts/Link";
 
 function PasswordForgetPage() {
-  const { control } = useHooks();
+  const { control, onSubmit, errorMessage } = useHooks();
 
   return (
     <NonLoginForm>
@@ -26,7 +27,7 @@ function PasswordForgetPage() {
           "To reset your password, please enter the email address you use to log in."
         }
       </Box>
-      <form onSubmit={() => console.log("forget")}>
+      <form onSubmit={onSubmit}>
         <Box
           sx={{
             "& .MuiFormControl-root": {
@@ -36,7 +37,6 @@ function PasswordForgetPage() {
         >
           <TextInput
             label={"Email"}
-            type="email"
             name="email"
             control={control}
             placeholder={"Email"}
@@ -53,7 +53,26 @@ function PasswordForgetPage() {
         >
           {"Receive reset link"}
         </Button>
+
+        {errorMessage && (
+          <Box
+            sx={{
+              textAlign: "center",
+              color: "error.main",
+              fontSize: "0.75rem",
+              mt: 1,
+            }}
+          >
+            {errorMessage}
+          </Box>
+        )}
       </form>
+      <Link
+        href="/login"
+        sx={{ mt: 2, justifyContent: "center", display: "flex" }}
+      >
+        Return to login page
+      </Link>
     </NonLoginForm>
   );
 }

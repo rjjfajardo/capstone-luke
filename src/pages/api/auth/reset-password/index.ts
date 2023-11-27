@@ -17,6 +17,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         dob: string;
         contactNumber: string;
         newPassword: string;
+        forgetPasswordId?: number;
       };
       userId: string;
     } = req.body;
@@ -44,6 +45,17 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
         password: bcrypt.hashSync(values.newPassword, salt),
       },
     });
+
+    if (values.forgetPasswordId) {
+      await prisma.forgotPassword.update({
+        where: {
+          forgotPasswordId: values.forgetPasswordId,
+        },
+        data: {
+          isUsed: true,
+        },
+      });
+    }
 
     const transporter = nodemailer.createTransport({
       port: 465,

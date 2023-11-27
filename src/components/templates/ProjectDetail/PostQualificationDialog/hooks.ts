@@ -14,7 +14,7 @@ interface HookProps
 
 const schema = yup.object().shape({
   result: yup.string().required(),
-  remakrs: yup.string().required(),
+  remarks: yup.string().required(),
 });
 
 interface FormValues {
@@ -31,7 +31,12 @@ export const useHooks = ({ handleClose, projectId, status }: HookProps) => {
     reValidateMode: "onChange",
   });
 
-  const { control, reset, getValues } = formMethods;
+  const {
+    control,
+    reset,
+    getValues,
+    formState: { isValid },
+  } = formMethods;
 
   const handleResetAndClose = () => {
     reset();
@@ -61,5 +66,6 @@ export const useHooks = ({ handleClose, projectId, status }: HookProps) => {
     formMethods,
     handleResetAndClose,
     onSubmit: updateProjectPhase,
+    isValid,
   };
 };

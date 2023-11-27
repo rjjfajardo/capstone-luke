@@ -19,6 +19,7 @@ import { SyntheticEvent, useState } from "react";
 import { useHooks } from "./hooks";
 import CompanyLogo from "@/assets/logo.png";
 import Image from "next/image";
+import ConfirmationDialog from "../ConfirmationDialog";
 
 // const Search = styled("div")(({ theme }) => ({
 //   position: "relative",
@@ -68,6 +69,7 @@ interface NavbarProps {
 
 const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
   const { signOut } = useHooks();
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState<any>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<any>(null);
 
@@ -117,13 +119,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleProfile}>Profile</MenuItem>
-      <MenuItem
-        onClick={() =>
-          signOut({
-            callbackUrl: "/login",
-          })
-        }
-      >
+      <MenuItem onClick={() => setOpenConfirmationDialog(true)}>
         Log Out
       </MenuItem>
     </Menu>
@@ -216,6 +212,15 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
             >
               <MoreVertRoundedIcon sx={{ color: "#246BFD" }} />
             </IconButton>
+            <ConfirmationDialog
+              handleClose={() => setOpenConfirmationDialog(false)}
+              show={openConfirmationDialog}
+              signOut={() =>
+                signOut({
+                  callbackUrl: "/login",
+                })
+              }
+            />
           </Box>
         </Toolbar>
       </AppBar>

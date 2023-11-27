@@ -25,6 +25,9 @@ import SelectInput from "@/components/parts/SelectInput";
 import { CheckCircle } from "@mui/icons-material";
 import { PurchaseOrderStatus } from "@prisma/client";
 import { format } from "date-fns";
+import { Controller } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import moment from "moment";
 
 const PurchaseOrderDetails = () => {
   const {
@@ -41,6 +44,7 @@ const PurchaseOrderDetails = () => {
     isUploading,
     setIsUploading,
     watchStatus,
+    getStatusOptions,
   } = useHooks();
 
   return (
@@ -77,27 +81,37 @@ const PurchaseOrderDetails = () => {
                 disabled
               />
 
-              {order?.deliveredAt ? (
+              {order?.orderedAt && (
                 <Stack mb={2}>
-                  <InputLabel>Delivered Date</InputLabel>
+                  <InputLabel>Ordered Date</InputLabel>
                   <Box display="flex">
-                    {format(new Date(order.deliveredAt), "yyyy-mm-dd")}
+                    {format(new Date(order.orderedAt), "yyyy-MM-dd")}
                     <CheckCircle color="success" />
                   </Box>
                 </Stack>
-              ) : (
+              )}
+
+              {order?.deliveredAt && (
+                <Stack mb={2}>
+                  <InputLabel>Delivered Date</InputLabel>
+                  <Box display="flex">
+                    {format(new Date(order.deliveredAt), "yyyy-MM-dd")}
+                    <CheckCircle color="success" />
+                  </Box>
+                </Stack>
+              )}
+
+              {order?.deliveredAt && order?.orderedAt ? null : (
                 <SelectInput
                   name="status"
                   control={control}
-                  options={[
-                    { id: "Ordered", label: "Ordered" },
-                    { id: "Delivered", label: "Delivered" },
-                  ]}
+                  options={getStatusOptions()}
                   formControlProps={{ fullWidth: true, sx: { mb: 3 } }}
                   label="Status"
                   hasRequiredLabel
                 />
               )}
+
               {watchStatus === PurchaseOrderStatus.Delivered &&
                 !order?.deliveredAt && (
                   <Box mb={3}>
@@ -114,17 +128,64 @@ const PurchaseOrderDetails = () => {
                         label="Required"
                       />
                     </Stack>
-                    <DateInput
-                      label=""
-                      control={control}
+
+                    <Controller
                       name="deliveredAt"
-                      minDate={new Date("2023-11-11T22:53:40.366Z")}
-                      //TODO: NICE TO HAVAE FEATURE TO ONLY LIMIT BASED ON THE CONTRACT DURATION
-                      // maxDate={
-                      //   add(new Date(order?.project.createdAt!), {
-                      //     days: Number(order?.project.contractDuration),
-                      //   }) || ""
-                      // }
+                      control={control}
+                      defaultValue={null}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error, invalid },
+                      }) => (
+                        <DatePicker
+                          // label="Birthdate"
+                          disablePast
+                          value={value && new Date(value)}
+                          // eslint-disable-next-line
+                          onChange={(value) =>
+                            onChange(moment(value).format("YYYY-MM-DD"))
+                          }
+                        />
+                      )}
+                    />
+                  </Box>
+                )}
+
+              {watchStatus === PurchaseOrderStatus.Ordered &&
+                !order?.orderedAt && (
+                  <Box mb={3}>
+                    <Stack direction="row" gap={1}>
+                      <InputLabel>Ordered Date</InputLabel>
+
+                      <ValidationLabel
+                        sx={{
+                          color: "common.white",
+                          mb: 0.5,
+                          mr: 1,
+                          bgcolor: "error.main",
+                        }}
+                        label="Required"
+                      />
+                    </Stack>
+
+                    <Controller
+                      name="orderedAt"
+                      control={control}
+                      defaultValue={null}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error, invalid },
+                      }) => (
+                        <DatePicker
+                          // label="Birthdate"
+                          disablePast
+                          value={value && new Date(value)}
+                          // eslint-disable-next-line
+                          onChange={(value) =>
+                            onChange(moment(value).format("YYYY-MM-DD"))
+                          }
+                        />
+                      )}
                     />
                   </Box>
                 )}

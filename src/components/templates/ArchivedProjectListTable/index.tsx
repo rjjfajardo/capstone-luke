@@ -54,12 +54,20 @@ const ArchiveProjectListTable = () => {
       ),
     },
     {
+      field: "completedAt",
+      headerName: "Completion Date",
+      width: 150,
+      minWidth: 100,
+      renderCell: (params) =>
+        format(new Date(params.row.completedAt), "yyyy-MM-dd"),
+    },
+    {
       field: "deletedAt",
       headerName: "Date Deleted",
-      width: 310,
+      width: 160,
       minWidth: 150,
       renderCell: (params) =>
-        format(new Date(params.row.deletedAt || new Date()), "yyyy-mm-dd"),
+        format(new Date(params.row.deletedAt), "yyyy-MM-dd"),
     },
   ];
 

@@ -35,6 +35,7 @@ const DateInput: React.FC<DateInputProps> = ({
           }
           minDate={minDate}
           maxDate={maxDate}
+          disablePast
         />
       )}
     />

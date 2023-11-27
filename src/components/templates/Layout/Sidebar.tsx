@@ -79,18 +79,6 @@ const Sidebar = (props: any) => {
                 routerPathName={router.pathname}
               />
             ))}
-        <Stack mt={65}>
-          <IconButton
-            sx={{ fontSize: 18, color: "#ffffff" }}
-            onClick={() =>
-              signOut({
-                callbackUrl: "/login",
-              })
-            }
-          >
-            <ExitToAppIcon /> Sign Out
-          </IconButton>
-        </Stack>
       </List>
     </>
   );

@@ -10,7 +10,7 @@ const auth = (req: NextApiRequest, res: NextApiResponse) => ({ id: "fakeId" }); 
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   // imageUploader: f({ image: { maxFileSize: "4MB" } })
-  bucketFiles: f({ pdf: { maxFileSize: "4MB" } })
+  bucketFiles: f(["pdf", "image/jpeg", "pdf"])
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req, res }) => {
       // This code runs on your server before upload

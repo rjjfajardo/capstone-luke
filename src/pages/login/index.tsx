@@ -11,13 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
-import type { Session } from "next-auth";
 
-import { useHooks } from "../../hooks/login/hooks";
+import Link from "@/components/parts/Link";
+import Loading from "@/components/parts/Loading";
 import { CtxOrReq } from "next-auth/client/_utils";
 import { getSession } from "next-auth/react";
-import Loading from "@/components/parts/Loading";
-import NonLoginLayout from "@/components/templates/Layout/NotLoginLayout";
+import { useHooks } from "../../hooks/login/hooks";
 
 export default function LoginPage() {
   const {
@@ -33,7 +32,6 @@ export default function LoginPage() {
 
   return (
     <NonLoginForm>
-      {/* {loading && <Loading />} */}
       {loading ? (
         <Loading />
       ) : (
@@ -122,6 +120,12 @@ export default function LoginPage() {
               </Box>
             )}
           </form>
+          <Link
+            href="/password/forget"
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
+            Forget Password
+          </Link>
         </Stack>
       )}
     </NonLoginForm>

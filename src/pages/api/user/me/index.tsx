@@ -26,7 +26,6 @@ async function updateUserProfile(req: NextApiRequest, res: NextApiResponse) {
         fullName: values.fullName,
         contactNumber: values.contactNumber,
         dob: values.dob,
-        email: values.email,
       },
     });
     res.status(200).json({});

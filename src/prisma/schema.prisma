@@ -56,7 +56,9 @@ model User {
   projectAssignee    ProjectAssignee[]
   activityLog        ActivityLog[]
   comment            Comment[]
+  forgotPassword     ForgotPassword[]
   deletedAt          DateTime?
+  
 }
 
 model Project {
@@ -178,15 +180,17 @@ model PurchaseOrder {
 
   project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId  String  @unique
-  status PurchaseOrderStatus @default(Ordered)
+  status PurchaseOrderStatus @default(New)
 
   deliveredAt        DateTime?
+  orderedAt          DateTime?
   purchaseOrderMedia PurchaseOrderMedia[]
   createdAt          DateTime             @default(now())
   deletedAt          DateTime?
 }
 
 enum PurchaseOrderStatus {
+  New
   Ordered
   Delivered
 }
@@ -199,4 +203,14 @@ model PurchaseOrderMedia {
 
   fileName String
   fileUrl  String
+}
+
+
+model ForgotPassword {
+  forgotPasswordId Int      @id @default(autoincrement())
+  userId           String
+  token            String   
+  isUsed           Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [userId])
 }

@@ -20,11 +20,12 @@ const PostQualificationDialog = ({
   handleClose,
   status,
 }: PostQualificationProps) => {
-  const { control, onSubmit, handleResetAndClose, formMethods } = useHooks({
-    handleClose,
-    projectId,
-    status,
-  });
+  const { control, onSubmit, handleResetAndClose, formMethods, isValid } =
+    useHooks({
+      handleClose,
+      projectId,
+      status,
+    });
 
   return (
     <>
@@ -38,6 +39,7 @@ const PostQualificationDialog = ({
         cancelButtonLabel={"Close"}
         successButtonProps={{ variant: "contained", color: "primary" }}
         successButtonLabel={"Confirm"}
+        disabled={!isValid}
       >
         <FormProvider {...formMethods}>
           <SelectInput

@@ -103,7 +103,7 @@ const AdminDashboard = () => {
               fontWeight={700}
               fontSize={18}
             >
-              Number of Project (Status)
+              Active Number of Project (Status)
             </Box>
             <Box
               flexDirection="row"
