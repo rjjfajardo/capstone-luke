@@ -17,6 +17,7 @@ import { CtxOrReq } from "next-auth/client/_utils";
 import { getSession } from "next-auth/react";
 import Router from "next/router";
 import { Controller } from "react-hook-form";
+import { prisma } from "@/prisma/prisma";
 
 const ResetPasswordPage = ({
   data,
