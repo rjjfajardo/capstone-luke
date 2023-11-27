@@ -49,7 +49,7 @@ const StaffListTable = () => {
       width: 150,
       minWidth: 150,
       renderCell: (params) =>
-        format(new Date(params.row.createdAt), "yyyy-mm-dd"),
+        format(new Date(params.row.createdAt), "yyyy-MM-dd"),
     },
     {
       field: "totalAssignProject",

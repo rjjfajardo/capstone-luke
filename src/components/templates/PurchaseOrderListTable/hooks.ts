@@ -1,8 +1,13 @@
-import { PurchaseOrder } from "@prisma/client";
+import { PurchaseOrder, PurchaseOrderStatus } from "@prisma/client";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-export interface PurchaseOrders extends PurchaseOrder {}
+export interface PurchaseOrders extends PurchaseOrder {
+  project: {
+    title: string;
+    status: string;
+  };
+}
 
 export const useHooks = () => {
   const router = useRouter();

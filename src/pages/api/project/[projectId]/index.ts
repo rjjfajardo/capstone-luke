@@ -350,12 +350,23 @@ async function updateProject(req: NextApiRequest, res: NextApiResponse) {
 
 async function deleteProject(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const project = await prisma.project.delete({
-      where: {
-        id: String(req.query.projectId),
-      },
+    return await prisma.$transaction(async (transaction) => {
+      await transaction.project.delete({
+        where: {
+          id: String(req.query.projectId),
+        },
+      });
+
+      await transaction.purchaseOrder.update({
+        where: {
+          projectId: String(req.query.projectId),
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+      res.status(200).send({});
     });
-    return res.json(project);
   } catch (err) {
     console.error(err);
     return res.status(500).send({});

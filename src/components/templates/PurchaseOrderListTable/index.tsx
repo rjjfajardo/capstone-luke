@@ -1,11 +1,12 @@
 import { PurchaseOrderStatus } from ".prisma/client";
+import { Link } from "@/components/parts/Link/Link";
 import Loading from "@/components/parts/Loading";
 import MoreVertMenu from "@/components/parts/MoreVertMenu";
-import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
-import { PurchaseOrders, useHooks } from "./hooks";
-import { format } from "date-fns";
 import { Chip } from "@mui/material";
-import { Link } from "@/components/parts/Link/Link";
+import { DataGrid, GridColDef, GridRowParams } from "@mui/x-data-grid";
+import { format } from "date-fns";
+import { PurchaseOrders, useHooks } from "./hooks";
+import { getPurchaseOrderStatusColor } from "@/lib/getColor";
 
 const PurchaseOrderListTable = () => {
   const { orders, router, isLoading } = useHooks();
@@ -27,7 +28,27 @@ const PurchaseOrderListTable = () => {
         </Link>
       ),
     },
-
+    {
+      field: "title",
+      headerName: "Project Title",
+      width: 300,
+      minWidth: 200,
+      renderCell: (params) => (
+        <Link
+          href={`/projects/${params.row.projectId}`}
+          sx={{ textDecoration: "underline", color: "inherit" }}
+        >
+          {params.row.project.title}
+        </Link>
+      ),
+    },
+    {
+      field: "projectStatus",
+      headerName: "Project Status",
+      width: 120,
+      minWidth: 130,
+      renderCell: (params) => params.row.project.status,
+    },
     {
       field: "status",
       headerName: "Status",
@@ -37,35 +58,44 @@ const PurchaseOrderListTable = () => {
       renderCell: (params) => (
         <Chip
           label={params.row.status}
-          color={
-            params.row.status !== PurchaseOrderStatus.Delivered
-              ? "warning"
-              : "success"
-          }
+          color={getPurchaseOrderStatusColor(params.row.status)}
         />
       ),
     },
     {
-      field: "createdAt",
-      headerName: "Order Created",
-      width: 200,
+      field: "orderedAt",
+      headerName: "Ordered Date",
+      width: 160,
       minWidth: 150,
-      valueGetter: ({ row }) =>
-        format(new Date(row.deliveredAt || new Date()), "yyyy-mm-dd"),
+      renderCell: (params) =>
+        params.row.orderedAt
+          ? format(new Date(params.row.orderedAt), "yyyy-MM-dd")
+          : "",
     },
     {
       field: "deliveredAt",
-      headerName: "Date Delivered",
-      width: 658,
+      headerName: "Delivered Date",
+      width: 160,
       minWidth: 150,
       renderCell: (params) =>
-        format(new Date(params.row.deliveredAt || new Date()), "yyyy-mm-dd"),
+        params.row.deliveredAt
+          ? format(new Date(params.row.deliveredAt), "yyyy-MM-dd")
+          : "",
+    },
+    {
+      field: "createdAt",
+      headerName: "Order Created",
+      width: 160,
+      minWidth: 150,
+      valueGetter: ({ row }) => row.createdAt,
+      renderCell: (params) =>
+        format(new Date(params.row.createdAt), "yyyy-MM-dd"),
     },
     {
       field: "Action",
       type: "actions",
       align: "right",
-      width: 100,
+      width: 60,
       minWidth: 60,
       getActions: (params) => getActionMenu(params),
     },

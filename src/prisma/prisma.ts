@@ -26,8 +26,7 @@ prisma.$use(async (params, next) => {
     params.model == "ProjectAssignee" ||
     params.model == "ActivityLog" ||
     params.model == "Comment" ||
-    params.model == "PurchaseOrder" ||
-    params.model == "PurchaseOrderMedia"
+    params.model == "PurchaseOrder"
   ) {
     if (params.action == "delete" || params.action == "deleteMany") {
       if (params.action == "delete") {
@@ -55,7 +54,8 @@ prisma.$use(async (params, next) => {
     params.model == "PostQualificationResult" ||
     params.model == "ProjectAssignee" ||
     params.model == "ActivityLog" ||
-    params.model == "Comment"
+    params.model == "Comment" ||
+    params.model == "PurchaseOrder"
   ) {
     if (params.action == "findMany" || params.action == "findFirst") {
       params.args["where"] = { ...params.args.where, deletedAt: null };

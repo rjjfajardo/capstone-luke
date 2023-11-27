@@ -2,11 +2,18 @@ import { useSnackbar } from "@/hooks/useSnackbar";
 import axios from "@/lib/axios";
 import yup from "@/lib/yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Project, PurchaseOrder, PurchaseOrderMedia } from "@prisma/client";
+import {
+  Project,
+  PurchaseOrder,
+  PurchaseOrderMedia,
+  PurchaseOrderStatus,
+} from "@prisma/client";
+import moment from "moment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import useSWR, { mutate } from "swr";
+import type { Options } from "@/components/parts/SelectInput/SelectInput";
 
 interface FormValues extends Partial<PurchaseOrder> {}
 
@@ -18,7 +25,8 @@ interface PurchaseOrderI extends FormValues {
 const schema = yup.object().shape({
   purchaseOrderNumber: yup.string().required(),
   status: yup.string().required(),
-  deliveredAt: yup.string().required(),
+  deliveredAt: yup.string().optional(),
+  orderedAt: yup.string().optional(),
 });
 
 export interface FileUploadI {
@@ -64,11 +72,15 @@ export const useHooks = () => {
 
     if (order?.purchaseOrderMedia.length) {
       setFiles(
-        order?.purchaseOrderMedia.map((file) => ({
+        order.purchaseOrderMedia.map((file) => ({
           fileName: file.fileName,
           fileUrl: file.fileUrl,
         }))
       );
+      setFileToPreview({
+        fileName: order.purchaseOrderMedia[0].fileName,
+        fileUrl: order.purchaseOrderMedia[0].fileUrl,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
@@ -103,6 +115,26 @@ export const useHooks = () => {
     }
   };
 
+  const getStatusOptions = () => {
+    const options: Options[] = [];
+
+    if (order?.status === PurchaseOrderStatus.New) {
+      options.push({
+        id: "Ordered",
+        label: "Ordered",
+      });
+    }
+
+    if (order?.status === PurchaseOrderStatus.Ordered) {
+      options.push({
+        id: "Delivered",
+        label: "Delivered",
+      });
+    }
+
+    return options;
+  };
+
   return {
     order,
     control,
@@ -117,5 +149,6 @@ export const useHooks = () => {
     isUploading,
     setIsUploading,
     watchStatus,
+    getStatusOptions,
   };
 };

@@ -10,6 +10,7 @@ export type FindAllProject = {
   approvedBudgetContract: number;
   //   procurementMode: string;
   //   contractDuration: string;
+  completedAt: Date;
   deletedAt: Date;
   priority: string;
   projectAssignee: {

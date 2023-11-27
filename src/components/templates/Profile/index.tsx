@@ -1,6 +1,9 @@
 import FormBase from "@/components/parts/FormBase";
 import PageTitle from "@/components/parts/PageTitlte";
 import TextInput from "@/components/parts/TextInput";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import moment from "moment";
+
 import {
   Box,
   Button,
@@ -57,13 +60,32 @@ const Profile = () => {
                 control={control}
                 formControlProps={{ fullWidth: true, sx: { mb: 3 } }}
                 label="Email Address"
+                disabled
               />
             </Grid>
             <Grid item xs={12} lg={6} zeroMinWidth>
               <Stack direction="column" mb={3}>
                 <InputLabel>Date of Birth</InputLabel>
 
-                <DateInput label="" control={control} name="dob" />
+                <Controller
+                  name="dob"
+                  control={control}
+                  defaultValue={null}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error, invalid },
+                  }) => (
+                    <DatePicker
+                      // label="Birthdate"
+
+                      value={value && new Date(value)}
+                      // eslint-disable-next-line
+                      onChange={(value) =>
+                        onChange(moment(value).format("YYYY-MM-DD"))
+                      }
+                    />
+                  )}
+                />
               </Stack>
               <TextInput
                 name="contactNumber"

@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import { useSnackbar } from "@/hooks/useSnackbar";
 import useSWR, { mutate } from "swr";
 
-interface UserI extends Partial<User> {
+export interface UserI extends Partial<User> {
   newPassword: string;
 }
 
@@ -19,7 +19,7 @@ const schema = yup.object().shape({
   dob: yup.string().required(),
 });
 
-const isChangePasswordOnlySchema = yup.object().shape({
+export const isChangePasswordOnlySchema = yup.object().shape({
   newPassword: yup
     .string()
     .min(6, "Password must be at least 6 characters")

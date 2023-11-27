@@ -10,6 +10,9 @@ async function getAllOrders(req: NextApiRequest, res: NextApiResponse) {
     const orders = await prisma.purchaseOrder.findMany({
       where: {
         project: {
+          // deletedAt: {
+          //   not: null
+          // },
           projectAssignee: {
             some: {
               userId: user?.user.id,
@@ -23,7 +26,15 @@ async function getAllOrders(req: NextApiRequest, res: NextApiResponse) {
         status: true,
         projectId: true,
         deliveredAt: true,
+        orderedAt: true,
+        createdAt: true,
         purchaseOrderMedia: true,
+        project: {
+          select: {
+            title: true,
+            status: true,
+          },
+        },
       },
     });
     return res.status(200).json(orders);
@@ -35,9 +46,20 @@ async function getAllOrders(req: NextApiRequest, res: NextApiResponse) {
         status: true,
         projectId: true,
         deliveredAt: true,
+        createdAt: true,
+        orderedAt: true,
         purchaseOrderMedia: true,
+        project: {
+          select: {
+            title: true,
+            status: true,
+          },
+        },
       },
     });
+
+    // await prisma.$queryRaw`SELECT * from PurchaseOrder LEFT JOIN Project ON PurchaseOrder.projectId = Project.id  WHERE Project.deletedAt IS NOT NULL `;
+
     return res.status(200).json(orders);
   }
 }

@@ -46,6 +46,7 @@ Table User {
   projectAssignee ProjectAssignee [not null]
   activityLog ActivityLog [not null]
   comment Comment [not null]
+  forgotPassword ForgotPassword [not null]
   deletedAt DateTime
 }
 
@@ -145,8 +146,9 @@ Table PurchaseOrder {
   purchaseOrderNumber String [not null]
   project Project [not null]
   projectId String [unique, not null]
-  status PurchaseOrderStatus [not null, default: 'Ordered']
+  status PurchaseOrderStatus [not null, default: 'New']
   deliveredAt DateTime
+  orderedAt DateTime
   purchaseOrderMedia PurchaseOrderMedia [not null]
   createdAt DateTime [default: `now()`, not null]
   deletedAt DateTime
@@ -160,7 +162,17 @@ Table PurchaseOrderMedia {
   fileUrl String [not null]
 }
 
+Table ForgotPassword {
+  forgotPasswordId Int [pk, increment]
+  userId String [not null]
+  token String [not null]
+  isUsed Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+}
+
 Enum PurchaseOrderStatus {
+  New
   Ordered
   Delivered
 }
@@ -190,3 +202,5 @@ Ref: Comment.userId > User.userId
 Ref: PurchaseOrder.projectId - Project.id [delete: Cascade]
 
 Ref: PurchaseOrderMedia.purchaseOrderId > PurchaseOrder.id [delete: Cascade]
+
+Ref: ForgotPassword.userId > User.userId

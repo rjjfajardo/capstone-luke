@@ -15,6 +15,7 @@ async function getPurchaseOrder(req: NextApiRequest, res: NextApiResponse) {
       projectId: true,
       status: true,
       deliveredAt: true,
+      orderedAt: true,
       createdAt: true,
       deletedAt: true,
       project: {
@@ -24,6 +25,7 @@ async function getPurchaseOrder(req: NextApiRequest, res: NextApiResponse) {
       },
       purchaseOrderMedia: {
         select: {
+          id: true,
           fileName: true,
           fileUrl: true,
         },
@@ -38,7 +40,7 @@ async function updatePurchaseOrder(req: NextApiRequest, res: NextApiResponse) {
     values,
     files,
   }: {
-    values: { status: PurchaseOrderStatus; deliveredAt: Date };
+    values: { status: PurchaseOrderStatus; deliveredAt: Date; orderedAt: Date };
     files: FileUploadI[];
   } = req.body;
 
@@ -50,7 +52,10 @@ async function updatePurchaseOrder(req: NextApiRequest, res: NextApiResponse) {
         },
         data: {
           status: values.status,
-          deliveredAt: new Date(values.deliveredAt),
+          ...(values.deliveredAt && {
+            deliveredAt: new Date(values.deliveredAt),
+          }),
+          ...(values.orderedAt && { orderedAt: new Date(values.orderedAt) }),
         },
       });
 
@@ -59,6 +64,12 @@ async function updatePurchaseOrder(req: NextApiRequest, res: NextApiResponse) {
         fileUrl: file.fileUrl || "",
         fileName: file.fileName || "",
       }));
+
+      await transaction.purchaseOrderMedia.deleteMany({
+        where: {
+          purchaseOrderId: String(req.query.purchaseOrderId),
+        },
+      });
 
       await transaction.purchaseOrderMedia.createMany({
         data: filesToSave,
